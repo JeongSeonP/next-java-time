@@ -2,26 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+@font-face {
+  font-family: "icofont";
+  src: url("/assets/fonts/icofont.eot?1sjewr");
+  src: url("/assets/fonts/icofont.eot?1sjewr#iefix") format("embedded-opentype"),
+    url("/assets/fonts/icofont.ttf?1sjewr") format("truetype"),
+    url("/assets/fonts/icofont.woff?1sjewr") format("woff"),
+    url("/assets/fonts/icofont.svg?1sjewr#icofont") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "icofont" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.ico-coffeeBean:before {
+  content: "\e900";
+}
+
+main {
+  min-height: calc(100vh - 96px - 224px);
+  margin-top: 96px;
+  color: #52453a;
+}
+
+.modal:not(dialog:not(.modal-open)) {
+  background-color: transparent;
 }
