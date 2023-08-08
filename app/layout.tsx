@@ -1,11 +1,11 @@
-"use client";
-
+// "use client";
 import Header from "@/components/common/Header";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { RecoilRoot } from "recoil";
 import Footer from "@/components/common/Footer";
+import RecoilRootWrapper from "@/components/common/RecoilRootWrapper";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -13,20 +13,17 @@ export const metadata: Metadata = {
   title: "Java Time",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="ko">
-      <RecoilRoot>
-        <body>
+      <body>
+        <RecoilRootWrapper>
           <Header />
           {children}
           <Footer />
-        </body>
-      </RecoilRoot>
+        </RecoilRootWrapper>
+      </body>
     </html>
   );
-}
+};
+export default RootLayout;
