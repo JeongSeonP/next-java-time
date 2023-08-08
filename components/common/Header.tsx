@@ -18,7 +18,7 @@ const Header = () => {
   }, [pathname]);
 
   return (
-    <header className="h-24 p-5 bg-base-200 fixed top-0 left-0 right-0 z-[9999] shadow">
+    <header className="h-24 p-4 bg-base-200 fixed top-0 left-0 right-0 z-[9999] shadow">
       <div className="w-full lg:w-4/6 mx-auto flex justify-between items-center">
         <h1 className="sm:w-40 w-10 text-2xl">
           <Link

@@ -7,7 +7,7 @@ import Link from "next/link";
 import { BsChatHeartFill } from "react-icons/Bs";
 import { RecoilRoot } from "recoil";
 
-export default function Home() {
+const Home = () => {
   return (
     <main className="py-5 pb-20">
       <div className="w-4/5 mx-auto text-center">
@@ -39,4 +39,5 @@ export default function Home() {
       </div>
     </main>
   );
-}
+};
+export default Home;

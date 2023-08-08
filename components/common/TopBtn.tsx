@@ -1,3 +1,5 @@
+"use client";
+
 import { BiUpArrowAlt } from "react-icons/bi";
 
 const Topbtn = () => {

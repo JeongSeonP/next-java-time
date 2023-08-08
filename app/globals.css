@@ -34,7 +34,7 @@ i {
 }
 
 main {
-  min-height: calc(100vh - 96px - 224px);
+  min-height: calc(100vh - 96px - 216px);
   margin-top: 96px;
   color: #52453a;
 }
