@@ -17,7 +17,7 @@ const InputDispatch = () => {
 
   useEffect(() => {
     setSearchInput("");
-  }, []);
+  }, [setSearchInput]);
 
   return (
     <div className="relative ">

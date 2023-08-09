@@ -1,8 +1,14 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { BiUpArrowAlt } from "react-icons/bi";
 
 const Topbtn = () => {
+  const pathname = usePathname();
+  const path = pathname !== "/login" && pathname !== "/join" ? true : false;
+
+  if (!path) return;
+
   const scrollToTop = () => {
     window.scrollTo(0, 0);
   };

@@ -1,14 +1,14 @@
 "use client";
 
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { auth } from "@/lib/firebase";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosClose } from "react-icons/Io";
 import { FcGoogle } from "react-icons/Fc";
+import { MdError } from "react-icons/Md";
 import {
-  useAuthState,
   useSignInWithEmailAndPassword,
   useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
@@ -24,82 +24,66 @@ const LoginForm = () => {
     register,
     formState: { errors },
     handleSubmit: onSubmit,
-    clearErrors,
     setValue,
+    setFocus,
     watch,
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
     mode: "onSubmit",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
   const emailInput = watch("email");
   const passwordInput = watch("password");
-
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   // const location = useLocation();
   // const redirectedFrom = location?.state?.redirectedFrom?.pathname || "/";
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
-  const [signInWithGoogle, GGuser, GGloading, GGerror] =
+  const [signInWithGoogle, GoogleUser, GoogleLoading, GoogleError] =
     useSignInWithGoogle(auth);
 
-  // useEffect(() => {
-  //   if (user || GGuser) {
-  //     localStorage.setItem("isLogin", "true");
-  //     // setEmail("");
-  //     // setPassword("");
-  //     // router.push(redirectedFrom);
-  //   }
+  useEffect(() => {
+    if (user || GoogleUser) {
+      localStorage.setItem("isLogin", "true");
+      // router.push("/");
+      router.replace("/");
 
-  //   if (error || GGerror) {
-  //     let errorCode;
-  //     if (error) {
-  //       errorCode = error.code;
-  //     } else if (GGerror) {
-  //       errorCode = GGerror.code;
-  //     }
+      // router.push(redirectedFrom);
+    }
 
-  //     switch (errorCode) {
-  //       case "auth/user-not-found":
-  //         setErrorMsg("가입되지 않은 사용자입니다.");
-  //         setEmail("");
-  //         setPassword("");
-  //         emailRef.current?.focus();
-  //         break;
-  //       case "auth/invalid-email":
-  //         setErrorMsg("EMAIL주소를 입력해주세요.");
-  //         setEmail("");
-  //         setPassword("");
-  //         emailRef.current?.focus();
-  //         break;
-  //       case "auth/wrong-password":
-  //         setErrorMsg("PASSWORD가 올바르지 않습니다.");
-  //         setPassword("");
-  //         passwordRef.current?.focus();
-  //         break;
-  //       case "auth/missing-password":
-  //         setErrorMsg("PASSWORD를 입력해주세요.");
-  //         setPassword("");
-  //         passwordRef.current?.focus();
-  //         break;
-  //     }
-  //   }
-  // }, [user, error, GGuser, GGerror]);
+    if (!error && !GoogleError) return;
+    const errorCode = error ? error.code : GoogleError?.code;
 
-  const handleLogin: SubmitHandler<FieldValues> = async (
-    formData: FieldValues
-  ) => {
-    // setErrorMsg("");
+    switch (errorCode) {
+      case "auth/user-not-found":
+        setErrorMsg("가입되지 않은 사용자입니다.");
+        setFocus("email");
+        break;
+      case "auth/wrong-password":
+        setErrorMsg("비밀번호가 올바르지 않습니다.");
+        setFocus("password");
+        break;
+    }
+  }, [user, error, GoogleUser, GoogleError, setFocus, router]);
 
+  useEffect(() => {
+    const errorMessage = errors.email?.message
+      ? errors.email?.message
+      : errors.password?.message;
+    if (!errorMessage) return;
+    setErrorMsg(errorMessage);
+  }, [errors]);
+
+  const handleLogin = async (formData: LoginFormData) => {
     const res = await signInWithEmailAndPassword(emailInput, passwordInput);
     return res;
   };
 
-  const handleGGLogin = async () => {
+  const handleGoogleLogin = async () => {
     const res = await signInWithGoogle();
     return res;
   };
@@ -118,7 +102,7 @@ const LoginForm = () => {
             className="placeholder:text-xs input w-full max-w-xs bg-[#fff] input-bordered input-primary rounded-[15px]  "
             {...register("email")}
           />
-          {emailInput === "" ? null : (
+          {emailInput !== "" ? (
             <button
               type="button"
               onClick={() => setValue("email", "")}
@@ -126,7 +110,7 @@ const LoginForm = () => {
             >
               <IoIosClose />
             </button>
-          )}
+          ) : null}
         </div>
         <div className="relative mb-2">
           <label htmlFor="password" className="sr-only">
@@ -139,7 +123,7 @@ const LoginForm = () => {
             className="placeholder:text-xs input w-full max-w-xs bg-[#fff] input-bordered input-primary rounded-[15px]"
             {...register("password")}
           />
-          {passwordInput === "" ? null : (
+          {passwordInput !== "" ? (
             <button
               type="button"
               onClick={() => setValue("password", "")}
@@ -147,29 +131,28 @@ const LoginForm = () => {
             >
               <IoIosClose />
             </button>
+          ) : null}
+        </div>
+        <div className="flex justify-end items-center text-error text-right text-[11px] h-5">
+          {errorMsg && (
+            <>
+              <MdError className="mr-1" />
+              <p>{errorMsg}</p>
+            </>
           )}
         </div>
-        <p className="text-error text-right text-xs h-5">{errorMsg}</p>
         <button className="btn text-sub-color bg-neutral/90 hover:bg-neutral w-full rounded-full shadow-md no-animation my-2">
           로그인
         </button>
       </form>
       <div className="divider my-1 text-xs">OR</div>
       <button
-        onClick={handleGGLogin}
+        onClick={handleGoogleLogin}
         className="relative btn btn-neutral text-sub-color w-full rounded-full shadow-md no-animation my-2"
       >
         <FcGoogle size="18" className="absolute left-12" />
         구글 로그인
       </button>
-      <div className="text-right">
-        <button
-          onClick={() => router.push("/join")}
-          className="link link-primary mx-6 text-[13px] text-primary-dark-color"
-        >
-          회원가입
-        </button>
-      </div>
     </>
   );
 };
