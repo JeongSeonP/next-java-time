@@ -2,8 +2,6 @@
 import Header from "@/components/common/Header";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { RecoilRoot } from "recoil";
 import Footer from "@/components/common/Footer";
 import RecoilRootWrapper from "@/components/common/RecoilRootWrapper";
 

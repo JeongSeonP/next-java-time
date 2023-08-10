@@ -12,7 +12,13 @@ import {
   useSignInWithEmailAndPassword,
   useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
-import { useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import Cookie from "js-cookie";
 
 const LoginForm = () => {
   const loginSchema = Yup.object({
@@ -39,20 +45,18 @@ const LoginForm = () => {
   const passwordInput = watch("password");
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
-  // const location = useLocation();
-  // const redirectedFrom = location?.state?.redirectedFrom?.pathname || "/";
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
   const [signInWithGoogle, GoogleUser, GoogleLoading, GoogleError] =
     useSignInWithGoogle(auth);
-
+  const pathname = usePathname();
+  const redirectedFrom = pathname !== "/login" ? pathname : "/";
   useEffect(() => {
     if (user || GoogleUser) {
       localStorage.setItem("isLogin", "true");
-      // router.push("/");
-      router.replace("/");
-
-      // router.push(redirectedFrom);
+      router.replace(redirectedFrom);
+      // console.log(user?.user.uid);
+      Cookie.set("login", "true", { expires: 1 });
     }
 
     if (!error && !GoogleError) return;
@@ -68,7 +72,7 @@ const LoginForm = () => {
         setFocus("password");
         break;
     }
-  }, [user, error, GoogleUser, GoogleError, setFocus, router]);
+  }, [user, error, GoogleUser, GoogleError, setFocus, router, redirectedFrom]);
 
   useEffect(() => {
     const errorMessage = errors.email?.message

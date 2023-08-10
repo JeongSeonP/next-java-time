@@ -6,15 +6,19 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/lib/firebase";
+import Cookie from "js-cookie";
 
 const MyMenu = () => {
   const [isLogin] = useAuthState(auth);
   const [signOut, loading, error] = useSignOut(auth);
   const router = useRouter();
 
+  // const user = auth.currentUser;
+  // console.log(user);
   const handleSignOut = async () => {
     await signOut();
-    localStorage.setItem("isLogin", "false");
+    // localStorage.removeItem("isLogin");
+    Cookie.remove("login");
     if (error) {
       throw new Error("로그아웃실패");
     }
