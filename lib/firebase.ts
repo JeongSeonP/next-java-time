@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { getDownloadURL, getStorage, list, ref } from "firebase/storage";
 // import { DeleteOption, ReviewDocumentData } from "../components/Review";
 // import { FlavorCode, RichnessCode } from "../components/SelectOptions";
@@ -23,6 +23,14 @@ import {
   arrayUnion,
   arrayRemove,
 } from "firebase/firestore";
+import {
+  CommentProp,
+  ReviewDocData,
+  ReviewDocProp,
+  UpdateCommentProp,
+} from "@/interface/review";
+import { UserDocProp } from "@/interface/user";
+import Cookie from "js-cookie";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
@@ -40,78 +48,16 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 
-export interface StoreDoc {
-  id: string;
-  phone: string;
-  storeName: string;
-  address: string;
-  stationList: string[];
-  x: string;
-  y: string;
-}
-
-interface ReviewDoc {
-  reviewID: string;
-  date: string;
-  user: {
-    email: string | null | undefined;
-    displayName: string | null | undefined;
-    uid: string | undefined;
-    photo: string | null | undefined;
-  };
-  flavor: string;
-  richness: string;
-  text: string;
-  rating: string;
-  image: string | null;
-  comments: CommentProp[] | null;
-  isRevised: boolean;
-}
-export interface ReviewDocData {
-  reviewID: string;
-  date: string;
-  user: {
-    email: string;
-    displayName: string | null;
-    uid: string;
-    photo: string | null | undefined;
-  };
-  flavor: FlavorCode;
-  richness: RichnessCode;
-  text: string;
-  rating: string;
-  image: string | null;
-  comments: CommentProp[] | null;
-  isRevised: boolean;
-}
-
-interface ReviewDocProp {
-  prevRating: string | null;
-  id: string;
-  newDoc: StoreDoc;
-  reviewID: string;
-  review: ReviewDoc;
-}
-
-export interface UpdateCommentProp {
-  newDoc: CommentProp | null;
-  storeId: string;
-  reviewId: string;
-  commentId: number | null;
-  newText: string | null;
-}
-
-export interface CommentProp {
-  text: string;
-  date: string;
-  commentId: number;
-  userInfo: {
-    displayName: string | null;
-    email: string | null;
-    uid: string;
-  };
-  isRevised: boolean;
-}
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const userCookie = Cookie.get("login");
+    if (!userCookie) {
+      Cookie.set("login", "true", { expires: 2 });
+    }
+  } else {
+    Cookie.remove("login");
+  }
+});
 
 export const setDocReview = async ({
   prevRating,
@@ -239,7 +185,7 @@ export const getReviewList = async (
       if (reviewList.length === perPage + 1) {
         reviewList.splice(5, 1);
       }
-      const result: ReviewDocumentData = {
+      const result: ReviewDocData = {
         reviewList: reviewList,
         nextPage: nextPage,
         hasNextPage: hasNextPage,
@@ -364,17 +310,6 @@ export const findStoreByStation = async (station: string) => {
     throw new Error("Error");
   }
 };
-
-export interface UserDocProp {
-  uid: string;
-  userDoc: UserDoc;
-}
-
-export interface UserDoc {
-  favoriteFlavor: string;
-  favoriteType: string;
-  isPublic: boolean;
-}
 
 export const setDocUser = async ({ uid, userDoc }: UserDocProp) => {
   if (!uid) return;

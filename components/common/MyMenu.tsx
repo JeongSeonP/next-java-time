@@ -13,12 +13,9 @@ const MyMenu = () => {
   const [signOut, loading, error] = useSignOut(auth);
   const router = useRouter();
 
-  // const user = auth.currentUser;
-  // console.log(user);
   const handleSignOut = async () => {
     await signOut();
-    // localStorage.removeItem("isLogin");
-    Cookie.remove("login");
+
     if (error) {
       throw new Error("로그아웃실패");
     }

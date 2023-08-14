@@ -18,7 +18,6 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import Cookie from "js-cookie";
 
 const LoginForm = () => {
   const loginSchema = Yup.object({
@@ -53,10 +52,7 @@ const LoginForm = () => {
   const redirectedFrom = pathname !== "/login" ? pathname : "/";
   useEffect(() => {
     if (user || GoogleUser) {
-      localStorage.setItem("isLogin", "true");
       router.replace(redirectedFrom);
-      // console.log(user?.user.uid);
-      Cookie.set("login", "true", { expires: 1 });
     }
 
     if (!error && !GoogleError) return;
@@ -82,14 +78,12 @@ const LoginForm = () => {
     setErrorMsg(errorMessage);
   }, [errors]);
 
-  const handleLogin = async (formData: LoginFormData) => {
-    const res = await signInWithEmailAndPassword(emailInput, passwordInput);
-    return res;
+  const handleLogin = (formData: LoginFormData) => {
+    signInWithEmailAndPassword(formData.email, formData.password);
   };
 
-  const handleGoogleLogin = async () => {
-    const res = await signInWithGoogle();
-    return res;
+  const handleGoogleLogin = () => {
+    signInWithGoogle();
   };
 
   return (
