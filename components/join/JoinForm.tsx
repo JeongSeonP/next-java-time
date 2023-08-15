@@ -63,19 +63,23 @@ const JoinForm = () => {
       setTimeout(() => router.push("/"), SHOW_MODAL_DELAY);
     }
     if (error) {
+      setModal(false);
       switch (error.code) {
         case "auth/email-already-in-use":
           setErrorMsg("이미 가입된 email주소입니다.");
+          setFocus("email");
           break;
         case "auth/invalid-email":
-          setErrorMsg("잘못된 email주소입니다.");
+          setErrorMsg("잘못된 형식의 email주소입니다.");
+          setFocus("email");
           break;
         case "auth/weak-password":
           setErrorMsg("PASSWORD는 최소 6자 이상이어야 합니다.");
+          setFocus("password");
           break;
       }
     }
-  }, [user, error]);
+  }, [user, error, router, setFocus]);
 
   const handleJoin = (formData: JoinFormData) => {
     setModal(true);
@@ -231,7 +235,7 @@ const JoinForm = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-end text-[11px] h-4 w-11/12 font-light text-error bg-base-100 mt-1">
+        <div className="flex justify-end text-[11px] h-4 w-full font-light text-error bg-base-100 mt-1">
           {errorMsg && (
             <>
               <MdError className="mr-1 mt-1" />
