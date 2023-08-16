@@ -19,7 +19,7 @@ const SearchInput = ({ value, dispatchValue, placeHolder }: props) => {
         onChange={(e) => dispatchValue(e.target.value)}
         placeholder={placeHolder}
         spellCheck={false}
-        className="input input-bordered border-none w-full bg-[#fff] placeholder:text-xs focus:outline-none"
+        className="input input-bordered border-none w-full bg-white placeholder:text-xs focus:outline-none"
       />
       {value === "" ? null : (
         <button
@@ -31,7 +31,7 @@ const SearchInput = ({ value, dispatchValue, placeHolder }: props) => {
         </button>
       )}
 
-      <button className="btn btn-square bg-[#fff] hover:bg-[#fff] border-none">
+      <button className="btn btn-square bg-white hover:bg-white border-none">
         <BiSearch size="24" className="text-sub-color" />
       </button>
     </>

@@ -1,13 +1,10 @@
-"use client";
-
 import InputDispatch from "@/components/storeSearch/InputDispatch";
 import Table from "@/components/home/Table";
-import Image from "next/image";
 import Link from "next/link";
 import { BsChatHeartFill } from "react-icons/Bs";
-import { RecoilRoot } from "recoil";
+import { getSearchedStoreInfo } from "@/lib/kakaoAPI";
 
-const Home = () => {
+const HomePage = () => {
   return (
     <main className="py-5 pb-20">
       <div className="w-4/5 mx-auto text-center">
@@ -40,4 +37,4 @@ const Home = () => {
     </main>
   );
 };
-export default Home;
+export default HomePage;

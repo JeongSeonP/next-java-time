@@ -1,19 +1,19 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { auth } from "@/lib/firebase";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
 import {
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
-import { IoIosClose } from "react-icons/Io";
-import { MdError } from "react-icons/Md";
 import InformModal from "../common/InfomModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
+import { MdError } from "react-icons/Md";
+import { IoIosClose } from "react-icons/Io";
 
 const JoinForm = () => {
   const joinSchema = Yup.object({
