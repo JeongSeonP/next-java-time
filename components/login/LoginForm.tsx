@@ -1,23 +1,19 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { auth } from "@/lib/firebase";
-import { useEffect, useState } from "react";
-import { IoIosClose } from "react-icons/Io";
-import { FcGoogle } from "react-icons/Fc";
-import { MdError } from "react-icons/Md";
 import {
   useSignInWithEmailAndPassword,
   useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { IoIosClose } from "react-icons/Io";
+import { FcGoogle } from "react-icons/Fc";
+import { MdError } from "react-icons/Md";
+import { CgSpinner } from "react-icons/Cg";
 
 const LoginForm = () => {
   const loginSchema = Yup.object({
@@ -49,10 +45,10 @@ const LoginForm = () => {
   const [signInWithGoogle, GoogleUser, GoogleLoading, GoogleError] =
     useSignInWithGoogle(auth);
   const pathname = usePathname();
-  const redirectedFrom = pathname !== "/login" ? pathname : "/";
+
   useEffect(() => {
     if (user || GoogleUser) {
-      router.replace(redirectedFrom);
+      pathname !== "/login" ? router.refresh() : router.replace("/");
     }
 
     if (!error && !GoogleError) return;
@@ -68,7 +64,7 @@ const LoginForm = () => {
         setFocus("password");
         break;
     }
-  }, [user, error, GoogleUser, GoogleError, setFocus, router, redirectedFrom]);
+  }, [user, error, GoogleUser, GoogleError, setFocus, router, pathname]);
 
   useEffect(() => {
     const errorMessage = errors.email?.message
@@ -140,7 +136,13 @@ const LoginForm = () => {
           )}
         </div>
         <button className="btn text-sub-color bg-neutral/90 hover:bg-neutral w-full rounded-full shadow-md no-animation my-2">
-          로그인
+          {loading ? (
+            <div className="animate-spin text-base">
+              <CgSpinner />
+            </div>
+          ) : (
+            "로그인"
+          )}
         </button>
       </form>
       <div className="divider my-1 text-xs">OR</div>
@@ -149,7 +151,13 @@ const LoginForm = () => {
         className="relative btn btn-neutral text-sub-color w-full rounded-full shadow-md no-animation my-2"
       >
         <FcGoogle size="18" className="absolute left-12" />
-        구글 로그인
+        {GoogleLoading ? (
+          <div className="animate-spin text-base">
+            <CgSpinner />
+          </div>
+        ) : (
+          "구글 로그인"
+        )}
       </button>
     </>
   );
