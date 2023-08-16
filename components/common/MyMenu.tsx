@@ -42,7 +42,12 @@ const MyMenu = () => {
         >
           <div className="w-10 rounded-full bg-base-100 text-primary shadow">
             {isLogin?.photoURL ? (
-              <Image src={isLogin.photoURL} alt="프로필이미지" />
+              <Image
+                src={isLogin.photoURL}
+                alt="프로필이미지"
+                width={40}
+                height={40}
+              />
             ) : (
               <BsFillPersonFill size="40" className="mt-1" />
             )}
