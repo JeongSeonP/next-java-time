@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import SearchInput from "./SearchInput";
+import SearchInput from "../common/SearchInput";
 import { searchedInput } from "@/store/SearchInputAtom";
 import { useRouter } from "next/navigation";
 
@@ -15,9 +15,9 @@ const InputDispatch = () => {
     router.push("/reviewsearch");
   };
 
-  useEffect(() => {
-    setSearchInput("");
-  }, [setSearchInput]);
+  // useEffect(() => {
+  //   setSearchInput("");
+  // }, [setSearchInput]);
 
   return (
     <div className="relative ">

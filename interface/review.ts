@@ -1,3 +1,11 @@
+import { StoreDoc } from "./store";
+
+export interface ReviewForm {
+  rating: string;
+  flavor: string;
+  richness: string;
+  text: string;
+}
 export interface ReviewDoc {
   reviewID: string;
   date: string;
@@ -59,4 +67,13 @@ export interface CommentProp {
     uid: string;
   };
   isRevised: boolean;
+}
+
+export interface RevisionOption {
+  reviewID: string;
+  rating: string;
+  flavor: "sour" | "nutty";
+  richness: "rich" | "bland" | "bitter";
+  text: string;
+  img: string | null;
 }
