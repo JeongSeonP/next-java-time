@@ -17,7 +17,7 @@ const SearchedStores = ({ storeList, dispatchID }: SearchedStoreProps) => {
         ? storeList.map((store) => (
             <li
               key={store.id}
-              className="flex justify-start items-center z-[9999]  p-2 border border-base-300 hover:bg-base-100 rounded-xl transition duration-300 ease-in-out"
+              className="flex justify-start items-center z-[9999]  p-2 border-b border-white hover:bg-base-100 rounded-xl transition duration-100 ease-in-out"
             >
               <input
                 type="radio"

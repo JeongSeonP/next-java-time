@@ -91,8 +91,8 @@ export const setDocReview = async ({
         isRevised: review.isRevised,
       });
     }
-  } catch (e) {
-    throw new Error("Error");
+  } catch (error) {
+    throw new Error(`setDocReview Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
@@ -334,13 +334,13 @@ export const getDocUser = async (uid: string | undefined) => {
   }
 };
 
-export const getUrl = async (refPath: string) => {
+export const getImgUrl = async (refPath: string) => {
   const imageRef = ref(storage, refPath);
   try {
     const url = await getDownloadURL(imageRef);
     return url;
-  } catch (e) {
-    throw new Error("error");
+  } catch (error) {
+    throw new Error(`getImgUrl Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 

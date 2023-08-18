@@ -28,9 +28,8 @@ interface StoreSearchProps {
 const StoreSearch = ({ dispatch }: StoreSearchProps) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchedList, setSearchedLIst] = useState<StoreProps[]>([]);
-  const [page, setPage] = useState("");
+  const [page, setPage] = useState(0);
   const [lastPage, setLastPage] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [noResult, setNoResult] = useState(false);
   const [resultModal, setResultModal] = useState(false);
 
@@ -39,13 +38,11 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
     if (searchInput == "") return;
     setResultModal(true);
     setSearchedLIst([]);
-    setPage("1");
-    getPage();
+    setPage(1);
   };
 
   const handlePage = async () => {
-    setIsLoading(true);
-    setPage((page) => String(Number(page) + 1));
+    setPage((page) => page + 1);
   };
 
   const getSelectedStore = (selectedID: string) => {
@@ -68,12 +65,12 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
   };
 
   const getPage = async () => {
-    if (searchInput === "" || page === "0") return;
+    if (searchInput === "" || page === 0) return;
     const [storeInfos, isEnd] = await getSearchedStoreInfo(searchInput, page);
     if (storeInfos.length === 0) {
       setNoResult(true);
       setLastPage(true);
-      setPage("0");
+      setPage(0);
       setSearchedLIst([]);
       return;
     } else {
@@ -84,7 +81,7 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
     if (isEnd) {
       setLastPage(isEnd);
     }
-    if (page !== "1") {
+    if (page !== 1) {
       const newStoreList = searchedList.concat(storeInfos);
       setSearchedLIst(newStoreList);
     } else {
@@ -101,7 +98,6 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
 
   useEffect(() => {
     getPage();
-    setIsLoading(false);
   }, [page]);
 
   return (
@@ -133,8 +129,7 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
           {lastPage ? null : (
             <button
               onClick={handlePage}
-              className={`btn btn-sm btn-ghost w-3/4 bg-base-100 hover:bg-base-300 mb-2
-                ${isLoading ? "loading" : ""}`}
+              className="btn btn-sm btn-ghost w-3/4 bg-base-100 hover:bg-base-300 mb-2"
             >
               더보기
             </button>
