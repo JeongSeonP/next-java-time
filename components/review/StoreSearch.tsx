@@ -102,8 +102,8 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center">
-        <div className="relative w-[350px]">
+      <div className="flex justify-center items-center  w-full ">
+        <div className="w-full max-w-lg">
           <form
             onSubmit={handleSubmit}
             className="input-group flex justify-center border border-base-300 relative w-full rounded-full shadow-sm"

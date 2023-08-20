@@ -5,15 +5,22 @@ import { useForm } from "react-hook-form";
 import { ReviewForm, RevisionOption } from "@/interface/review";
 import { useEffect, useState } from "react";
 import { flavorList, richnessList } from "@/constants/selectOptions";
-import { auth } from "@/lib/firebase";
-import InformModal from "../common/InfomModal";
+import { auth, getImgUrl, setDocReview, storage } from "@/lib/firebase";
+import InformModal from "../common/InformModal";
 import { useAuthState } from "react-firebase-hooks/auth";
 import ImageUploader, { Imagefile } from "../common/ImageUploader";
-import { FiAlertCircle } from "react-icons/fi";
 import { MdError } from "react-icons/Md";
+import { deleteObject, ref, uploadBytes } from "firebase/storage";
+import { getStation } from "@/lib/kakaoAPI";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import getQueryClient from "@/app/utils/getQueryClient";
+import { useRouter } from "next/navigation";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);
+  // const queryClient = getQueryClient();
+  const queryClient = useQueryClient();
+  const router = useRouter();
   const [existingReview, setExistingReview] = useState<RevisionOption | null>(
     null
   );
@@ -42,6 +49,17 @@ const ReviewForm = () => {
       text: "",
     },
   });
+
+  const { mutate: reviewMutate, isLoading } = useMutation(setDocReview, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["storeInfo"]);
+      queryClient.invalidateQueries(["reviewInfo", store.id]);
+      setTimeout(() => {
+        router.replace(`/store/${store.id}`);
+      }, 1000);
+    },
+  });
+
   const rate = watch("rating");
 
   useEffect(() => {
@@ -78,22 +96,94 @@ const ReviewForm = () => {
     }
   }, [existingReview, reset]);
 
-  const handleSubmit = (formData: ReviewForm) => {
-    // createDoc(formData);
+  const updateImg = async (isUpload: boolean, reviewID: string) => {
+    const imageRef = ref(storage, `store/${store.id}/${reviewID}`);
+    try {
+      if (isUpload) {
+        if (imgFile?.file) {
+          await uploadBytes(imageRef, imgFile.file);
+        }
+      } else {
+        await deleteObject(imageRef);
+      }
+    } catch (error) {
+      throw new Error(`updateImg Error: Time(${new Date()}) ERROR ${error}`);
+    }
+  };
+
+  const handleSubmit = async (formData: ReviewForm) => {
+    const createdDate = new Date().toLocaleDateString("en-US");
+    const { rating, flavor, richness, text } = formData;
+    const { x, y, id, phone, storeName, address } = store;
+    const stations: string[] = await getStation(x, y);
+    const stationList = [...new Set(stations)];
+
+    const prevRating = existingReview ? existingReview.rating : null;
+    const isRevised = existingReview ? true : false;
+    const reviewID = existingReview
+      ? existingReview.reviewID
+      : `${id}_${Date.now()}`;
+
+    if (imgFile) {
+      await updateImg(true, reviewID);
+    } else if (!imgFile && existingReview?.img) {
+      await updateImg(false, reviewID);
+    }
+    const url = imgFile
+      ? await getImgUrl(`store/${store.id}/${reviewID}`)
+      : null;
+
+    const newDoc = {
+      id: id,
+      phone: phone,
+      storeName: storeName,
+      address: address,
+      x: x,
+      y: y,
+      stationList: stationList,
+    };
+
+    const review = {
+      reviewID: reviewID,
+      date: createdDate,
+      user: {
+        email: user?.email,
+        displayName: user?.displayName,
+        uid: user?.uid,
+        photo: user?.photoURL,
+      },
+      flavor: flavor,
+      richness: richness,
+      text: text,
+      rating: rating,
+      image: url,
+      comments: null,
+      isRevised: isRevised,
+    };
+    reviewMutate({ prevRating, id, newDoc, reviewID, review });
+    setModal(true);
   };
 
   return (
     <>
-      <div className="mx-auto -translate-y-4 z-[999] relative w-[350px]">
+      <div className="mx-auto -translate-y-4 z-[999] ">
         <StoreSearch dispatch={setStore} />
       </div>
       <form onSubmit={onSubmit(handleSubmit)} className="flex flex-col">
-        <div className="flex justify-center items-center text-sm ">
-          <div className="inline-block w-1/3 text-center text-primary-dark-color font-semibold shrink-0 ml-5">
-            {store.storeName}
+        {store.storeName == "" ? (
+          <p className=" text-secondary-content text-sm font-semibold text-center">
+            {" "}
+            선택된 카페가 없습니다.
+          </p>
+        ) : (
+          <div className="flex justify-center items-center text-sm ">
+            <div className="inline-block w-1/3 text-center text-primary-dark-color font-semibold shrink-0 ml-5">
+              {store.storeName}
+            </div>
+            <p className="w-2/3 indent-3 text-left">{store.address}</p>
           </div>
-          <p className="w-2/3 indent-3 text-left">{store.address}</p>
-        </div>
+        )}
+
         <div className="flex justify-center items-center my-4 text-secondary-content text-sm font-semibold">
           <div className="inline-block  mr-2 ">평점 선택</div>
           <div className="rating flex items-center">
@@ -124,7 +214,7 @@ const ReviewForm = () => {
                 <input
                   type="radio"
                   value={value}
-                  className="radio radio-sm mr-2"
+                  className="radio radio-sm mr-2 bg-white"
                   {...register("flavor", {
                     required: "옵션을 선택해주세요.",
                   })}
@@ -154,7 +244,7 @@ const ReviewForm = () => {
                   <input
                     type="radio"
                     value={value}
-                    className="radio radio-sm mr-2"
+                    className="radio radio-sm mr-2 bg-white"
                     {...register("richness", {
                       required: "옵션을 선택해주세요.",
                     })}
@@ -214,7 +304,7 @@ const ReviewForm = () => {
           {existingReview ? "리뷰 수정" : "리뷰 등록"}
         </button>
         {modal && (
-          <InformModal loading={false} inform={"리뷰가 등록되었습니다!"} />
+          <InformModal loading={isLoading} inform={"리뷰가 등록되었습니다!"} />
         )}
       </form>
     </>
