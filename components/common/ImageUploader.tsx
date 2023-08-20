@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 
 export interface Imagefile {
@@ -26,7 +27,7 @@ const ImageUploader = ({ dispatch, img }: Props) => {
 
   return (
     <>
-      <div className="flex justify-center items-center text-sm font-semibold">
+      <div className="flex justify-center items-center  text-sm font-semibold">
         <label
           htmlFor="imageInput"
           className="w-20 text-xs text-primary-dark-color bg-primary/40 hover:bg-primary/70 h-36 rounded-l-lg shadow flex flex-col items-center justify-center"
@@ -45,9 +46,15 @@ const ImageUploader = ({ dispatch, img }: Props) => {
           </div>
           <p>찾아보기</p>
         </label>
-        <div className="w-36 h-36 z-[888] flex justify-center items-center rounded-r-lg shadow bg-[#fff] overflow-hidden relative">
+        <div className=" w-36 h-36 flex justify-center items-center rounded-r-lg shadow bg-white overflow-hidden relative z-10">
           {img ? (
-            <img src={img.thumbnail} alt={img.name} className="inline-block" />
+            <Image
+              src={img.thumbnail}
+              width={144}
+              height={144}
+              alt={img.name}
+              className="inline-block"
+            />
           ) : (
             <div className="text-xs font-thin text-neutral-400">
               <p>선택된 사진이</p>
@@ -57,7 +64,7 @@ const ImageUploader = ({ dispatch, img }: Props) => {
           <button
             type="button"
             onClick={() => dispatch(null)}
-            className="w-5 h-5 border rounded-full text-primary flex justify-center items-center bg-[#fff] hover:bg-primary hover:text-base-100 absolute top-1 right-1"
+            className="w-5 h-5 border rounded-full text-primary flex justify-center items-center bg-white hover:bg-primary hover:text-base-100 absolute top-1 right-1"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

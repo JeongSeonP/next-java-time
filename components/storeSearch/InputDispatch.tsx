@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import SearchInput from "../common/SearchInput";
-import { searchedInput } from "@/store/SearchInputAtom";
+import { searchedInput } from "@/recoilStore/SearchInputAtom";
 import { useRouter } from "next/navigation";
 
 const InputDispatch = () => {

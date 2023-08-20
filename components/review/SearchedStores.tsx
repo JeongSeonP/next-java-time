@@ -12,12 +12,12 @@ interface SearchedStoreProps {
 
 const SearchedStores = ({ storeList, dispatchID }: SearchedStoreProps) => {
   return (
-    <ul className="py-3 px-1 mx-auto bg-base-200 z-[9999] w-[350px]">
+    <ul className="py-3 px-1 mx-auto bg-base-200  w-full">
       {storeList.length > 0
         ? storeList.map((store) => (
             <li
               key={store.id}
-              className="flex justify-start items-center z-[9999]  p-2 border-b border-white hover:bg-base-100 rounded-xl transition duration-100 ease-in-out"
+              className="flex justify-start items-center   p-2 border-b border-white hover:bg-base-100 rounded-xl transition duration-100 ease-in-out"
             >
               <input
                 type="radio"

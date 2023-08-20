@@ -91,6 +91,7 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
 
   useEffect(() => {
     if (searchInput === "") {
+      setPage(0);
       setNoResult(false);
       setResultModal(false);
     }
@@ -103,10 +104,10 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
   return (
     <>
       <div className="flex justify-center items-center  w-full ">
-        <div className="w-full max-w-lg">
+        <div className=" w-full max-w-lg">
           <form
             onSubmit={handleSubmit}
-            className="input-group flex justify-center border border-base-300 relative w-full rounded-full shadow-sm"
+            className="relative input-group flex justify-center border border-base-300 w-full rounded-full shadow-sm"
           >
             <SearchInput
               value={searchInput}
@@ -114,28 +115,30 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
               placeHolder="리뷰 작성할 카페이름을 검색해보세요"
             />
           </form>
+          {resultModal ? (
+            <div className="absolute w-full max-w-lg bg-base-200 rounded-xl overflow-hidden shadow-md text-center">
+              {noResult ? (
+                <div className="w-[350px] p-6 text-sm">
+                  검색결과가 없습니다.
+                </div>
+              ) : (
+                <SearchedStores
+                  storeList={searchedList}
+                  dispatchID={getSelectedStore}
+                />
+              )}
+              {lastPage ? null : (
+                <button
+                  onClick={handlePage}
+                  className="btn btn-sm btn-ghost w-3/4 bg-base-100 hover:bg-base-300 mb-2"
+                >
+                  더보기
+                </button>
+              )}
+            </div>
+          ) : null}
         </div>
       </div>
-      {resultModal ? (
-        <div className="absolute bg-base-200 rounded-xl overflow-hidden shadow-md text-center">
-          {noResult ? (
-            <div className="w-[350px] p-6 text-sm">검색결과가 없습니다.</div>
-          ) : (
-            <SearchedStores
-              storeList={searchedList}
-              dispatchID={getSelectedStore}
-            />
-          )}
-          {lastPage ? null : (
-            <button
-              onClick={handlePage}
-              className="btn btn-sm btn-ghost w-3/4 bg-base-100 hover:bg-base-300 mb-2"
-            >
-              더보기
-            </button>
-          )}
-        </div>
-      ) : null}
     </>
   );
 };

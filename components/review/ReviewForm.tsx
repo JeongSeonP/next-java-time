@@ -166,12 +166,12 @@ const ReviewForm = () => {
 
   return (
     <>
-      <div className="mx-auto -translate-y-4 z-[999] ">
+      <div className="mx-auto -translate-y-4 relative z-[9999]">
         <StoreSearch dispatch={setStore} />
       </div>
       <form onSubmit={onSubmit(handleSubmit)} className="flex flex-col">
         {store.storeName == "" ? (
-          <p className=" text-secondary-content text-sm font-semibold text-center">
+          <p className="text-primary-dark-color text-sm font-semibold text-center">
             {" "}
             선택된 카페가 없습니다.
           </p>
@@ -186,7 +186,7 @@ const ReviewForm = () => {
 
         <div className="flex justify-center items-center my-4 text-secondary-content text-sm font-semibold">
           <div className="inline-block  mr-2 ">평점 선택</div>
-          <div className="rating flex items-center">
+          <div className="rating flex items-center -z-10">
             {Array.from({ length: 6 }, (v, i) => (v = String(i))).map(
               (rate) => (
                 <input
@@ -264,7 +264,7 @@ const ReviewForm = () => {
             )}
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center w-full max-w-lg text-sm mb-4 mx-auto">
+        <div className="flex flex-col justify-center items-center w-full max-w-lg text-sm mb-1 mx-auto">
           <textarea
             placeholder="리뷰를 입력해주세요 (10자 이상)"
             spellCheck={false}
@@ -300,7 +300,7 @@ const ReviewForm = () => {
         >
           다시 작성하기
         </button>
-        <button className="btn btn-neutral text-sub-color btn-wide rounded-full shadow-md no-animation my-8 block mx-auto">
+        <button className="btn btn-neutral text-sub-color btn-wide rounded-full shadow-md no-animation my-5 block mx-auto">
           {existingReview ? "리뷰 수정" : "리뷰 등록"}
         </button>
         {modal && (
