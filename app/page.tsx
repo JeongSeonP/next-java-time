@@ -4,7 +4,7 @@ import { BsChatHeartFill } from "react-icons/Bs";
 import getQueryClient from "./utils/getQueryClient";
 import { dehydrate } from "@tanstack/react-query";
 import { getMostPopularStores } from "@/lib/firebase";
-import HydratedComponent from "@/app/utils/HydratedStores";
+import HydratedComponent from "@/app/utils/HydratedComponent";
 import Table from "@/components/Table";
 
 const HomePage = async () => {
