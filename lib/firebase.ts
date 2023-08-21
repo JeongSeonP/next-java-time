@@ -31,6 +31,7 @@ import {
 } from "@/interface/review";
 import { UserDocProp } from "@/interface/user";
 import Cookie from "js-cookie";
+import { StoreDocumentData } from "@/interface/store";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
@@ -269,9 +270,10 @@ export const getMostPopularStores = async () => {
       doc.data()
     ) as StoreDocumentData[];
     return storeList;
-  } catch (e) {
-    console.log("e", e);
-    throw new Error("Error");
+  } catch (error) {
+    throw new Error(
+      `getMostPopularStores Error: Time(${new Date()}) ERROR ${error}`
+    );
   }
 };
 
@@ -352,8 +354,10 @@ export const getThumbnailUrl = async (refPath: string) => {
 
     const url = await getDownloadURL(imgList.items[0]);
     return url;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    throw new Error(
+      `getThumbnailUrl Error: Time(${new Date()}) ERROR ${error}`
+    );
   }
 };
 

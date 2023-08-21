@@ -4,7 +4,7 @@ import { BiSearch } from "react-icons/bi";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import InputDispatch from "../storeSearch/InputDispatch";
+import InputDispatch from "./InputDispatch";
 import MyMenu from "./MyMenu";
 
 const Header = () => {

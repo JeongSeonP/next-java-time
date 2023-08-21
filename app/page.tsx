@@ -1,10 +1,16 @@
-import InputDispatch from "@/components/storeSearch/InputDispatch";
-import Table from "@/components/home/Table";
+import InputDispatch from "@/components/InputDispatch";
 import Link from "next/link";
 import { BsChatHeartFill } from "react-icons/Bs";
-import { getSearchedStoreInfo } from "@/lib/kakaoAPI";
+import getQueryClient from "./utils/getQueryClient";
+import { dehydrate } from "@tanstack/react-query";
+import { getMostPopularStores } from "@/lib/firebase";
+import HydratedComponent from "@/app/utils/HydratedStores";
+import Table from "@/components/Table";
 
-const HomePage = () => {
+const HomePage = async () => {
+  const queryClient = getQueryClient();
+  await queryClient.prefetchQuery(["storeInfo"], getMostPopularStores);
+  const dehydratedState = dehydrate(queryClient);
   return (
     <main className="py-5 pb-20">
       <div className="w-4/5 mx-auto text-center">
@@ -31,7 +37,9 @@ const HomePage = () => {
           </button>
         </section>
         <section>
-          <Table />
+          <HydratedComponent state={dehydratedState}>
+            <Table />
+          </HydratedComponent>
         </section>
       </div>
     </main>

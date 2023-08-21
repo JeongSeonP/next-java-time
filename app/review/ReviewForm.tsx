@@ -6,15 +6,16 @@ import { ReviewForm, RevisionOption } from "@/interface/review";
 import { useEffect, useState } from "react";
 import { flavorList, richnessList } from "@/constants/selectOptions";
 import { auth, getImgUrl, setDocReview, storage } from "@/lib/firebase";
-import InformModal from "../common/InformModal";
 import { useAuthState } from "react-firebase-hooks/auth";
-import ImageUploader, { Imagefile } from "../common/ImageUploader";
 import { MdError } from "react-icons/Md";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { getStation } from "@/lib/kakaoAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import getQueryClient from "@/app/utils/getQueryClient";
 import { useRouter } from "next/navigation";
+import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
+import ImageUploader, { Imagefile } from "@/components/ImageUploader";
+import InformModal from "@/components/InformModal";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);
@@ -26,6 +27,7 @@ const ReviewForm = () => {
   );
   const [imgFile, setImgFile] = useState<Imagefile | null>(null);
   const [modal, setModal] = useState(false);
+  const [inform, setInform] = useState("리뷰가 등록되었습니다!");
   const [store, setStore] = useState({
     id: "",
     phone: "",
@@ -55,8 +57,8 @@ const ReviewForm = () => {
       queryClient.invalidateQueries(["storeInfo"]);
       queryClient.invalidateQueries(["reviewInfo", store.id]);
       setTimeout(() => {
-        router.replace(`/store/${store.id}`);
-      }, 1000);
+        router.replace(`/stores/${store.id}`);
+      }, SHOW_MODAL_DELAY);
     },
   });
 
@@ -112,6 +114,15 @@ const ReviewForm = () => {
   };
 
   const handleSubmit = async (formData: ReviewForm) => {
+    if (store.id == "") {
+      setInform("선택된 카페가 없습니다.");
+      setModal(true);
+      setTimeout(() => {
+        setModal(false);
+      }, SHOW_MODAL_DELAY);
+      return;
+    }
+    setInform("리뷰가 등록되었습니다!");
     const createdDate = new Date().toLocaleDateString("en-US");
     const { rating, flavor, richness, text } = formData;
     const { x, y, id, phone, storeName, address } = store;
@@ -186,7 +197,7 @@ const ReviewForm = () => {
 
         <div className="flex justify-center items-center my-4 text-secondary-content text-sm font-semibold">
           <div className="inline-block  mr-2 ">평점 선택</div>
-          <div className="rating flex items-center -z-10">
+          <div className="rating flex items-center">
             {Array.from({ length: 6 }, (v, i) => (v = String(i))).map(
               (rate) => (
                 <input
@@ -303,9 +314,7 @@ const ReviewForm = () => {
         <button className="btn btn-neutral text-sub-color btn-wide rounded-full shadow-md no-animation my-5 block mx-auto">
           {existingReview ? "리뷰 수정" : "리뷰 등록"}
         </button>
-        {modal && (
-          <InformModal loading={isLoading} inform={"리뷰가 등록되었습니다!"} />
-        )}
+        {modal && <InformModal loading={isLoading} inform={inform} />}
       </form>
     </>
   );

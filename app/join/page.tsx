@@ -1,4 +1,4 @@
-import JoinForm from "@/components/join/JoinForm";
+import JoinForm from "@/app/join/JoinForm";
 
 const JoinPage = () => {
   return (

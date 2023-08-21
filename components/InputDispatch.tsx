@@ -2,9 +2,9 @@
 
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import SearchInput from "../common/SearchInput";
 import { searchedInput } from "@/recoilStore/SearchInputAtom";
 import { useRouter } from "next/navigation";
+import SearchInput from "./SearchInput";
 
 const InputDispatch = () => {
   const [searchInput, setSearchInput] = useRecoilState(searchedInput);

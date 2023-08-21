@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import SearchInput from "../common/SearchInput";
+import SearchInput from "../../components/SearchInput";
 import SearchedStores from "./SearchedStores";
 import { getSearchedStoreInfo } from "@/lib/kakaoAPI";
 

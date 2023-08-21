@@ -1,11 +1,11 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
+import Footer from "@/components/Footer";
 import ReactQueryProviders from "./utils/ReactQueryProviders";
 import RecoilRootWrapper from "@/app/utils/RecoilRootWrapper";
 import { Suspense } from "react";
 import Loading from "./loading";
+import Header from "@/components/Header";
 
 // const inter = Inter({ subsets: ["latin"] });
 

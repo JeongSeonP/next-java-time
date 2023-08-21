@@ -1,5 +1,5 @@
-import ReviewForm from "@/components/review/ReviewForm";
-import StoreSearch from "@/components/review/StoreSearch";
+import ReviewForm from "@/app/review/ReviewForm";
+import StoreSearch from "@/app/review/StoreSearch";
 
 const ReviewPage = () => {
   return (

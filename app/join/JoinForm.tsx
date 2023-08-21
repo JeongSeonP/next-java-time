@@ -10,7 +10,7 @@ import {
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
-import InformModal from "../common/InformModal";
+import InformModal from "../../components/common/InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import { MdError } from "react-icons/Md";
 import { IoIosClose } from "react-icons/Io";
