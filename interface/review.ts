@@ -1,3 +1,4 @@
+import { FlavorCode, RichnessCode } from "@/constants/selectOptions";
 import { StoreDoc } from "./store";
 
 export interface ReviewForm {

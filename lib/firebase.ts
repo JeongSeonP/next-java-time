@@ -29,7 +29,7 @@ import {
   ReviewDocProp,
   UpdateCommentProp,
 } from "@/interface/review";
-import { UserDocProp } from "@/interface/user";
+import { UserDocProp, UserDocumentData } from "@/interface/user";
 import Cookie from "js-cookie";
 import { StoreDocumentData } from "@/interface/store";
 
@@ -253,8 +253,8 @@ export const getDocStore = async (id: string | undefined) => {
     if (docSnap.exists()) {
       return docSnap.data() as StoreDocumentData;
     }
-  } catch (e) {
-    throw new Error("Error");
+  } catch (error) {
+    throw new Error(`getDocStore Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
@@ -331,8 +331,8 @@ export const getDocUser = async (uid: string | undefined) => {
     if (docSnap.exists()) {
       return docSnap.data() as UserDocumentData;
     }
-  } catch (e) {
-    throw new Error("Error");
+  } catch (error) {
+    throw new Error(`getDocUser Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
