@@ -22,7 +22,7 @@ const Dropdown = (props: Props) => {
       </label>
       <ul
         tabIndex={0}
-        className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-22"
+        className="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-fit"
         onClick={handleFocus}
       >
         {props.children}

@@ -10,15 +10,11 @@ import Cookie from "js-cookie";
 
 const MyMenu = () => {
   const [isLogin] = useAuthState(auth);
-  const [signOut, loading, error] = useSignOut(auth);
+  const [signOut] = useSignOut(auth);
   const router = useRouter();
 
   const handleSignOut = async () => {
     await signOut();
-
-    if (error) {
-      throw new Error("로그아웃실패");
-    }
     router.push("/login");
   };
 

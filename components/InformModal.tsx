@@ -7,7 +7,7 @@ interface InformModalProps {
 }
 const InformModal = ({ loading, inform }: InformModalProps) => {
   return (
-    <div className="absolute top-0 right-0 bottom-0 left-0">
+    <div className="z-[9999] fixed top-0 right-0 bottom-0 left-0">
       <div className="absolute w-[300px] rounded-full overflow-hidden top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 card bg-base-100  shadow-xl">
         <div className="flex items-center justify-center card-body bg-[#f2e8f7] text-xs sm:text-sm h-36 font-semibold text-center ">
           {loading ? (

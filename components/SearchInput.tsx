@@ -19,6 +19,7 @@ const SearchInput = ({ value, dispatchValue, placeHolder }: props) => {
         onChange={(e) => dispatchValue(e.target.value)}
         placeholder={placeHolder}
         spellCheck={false}
+        name="storeSearchInput"
         className="input input-bordered border-none w-full bg-white placeholder:text-xs focus:outline-none"
       />
       {value === "" ? null : (

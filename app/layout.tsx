@@ -6,6 +6,7 @@ import RecoilRootWrapper from "@/app/utils/RecoilRootWrapper";
 import { Suspense } from "react";
 import Loading from "./loading";
 import Header from "@/components/Header";
+import ScrollToTop from "@/components/ScrollToTop";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <ReactQueryProviders>
           <RecoilRootWrapper>
+            <ScrollToTop />
             <Header />
             <Suspense fallback={<Loading />}>{children}</Suspense>
             <Footer />

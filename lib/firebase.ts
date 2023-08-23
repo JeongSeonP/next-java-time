@@ -330,6 +330,8 @@ export const getDocUser = async (uid: string | undefined) => {
     const docSnap = await getDoc(userRef);
     if (docSnap.exists()) {
       return docSnap.data() as UserDocumentData;
+    } else {
+      return null;
     }
   } catch (error) {
     throw new Error(`getDocUser Error: Time(${new Date()}) ERROR ${error}`);

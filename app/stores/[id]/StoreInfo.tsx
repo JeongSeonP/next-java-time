@@ -2,23 +2,16 @@ import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { BsTelephoneFill } from "react-icons/Bs";
 import Image from "next/image";
-import { getThumbnailUrl } from "@/lib/firebase";
+import { getDocStore, getThumbnailUrl } from "@/lib/firebase";
 import StarRate from "@/components/StarRate";
 import KakaoMap from "./KakaoMap";
+import { useQuery } from "@tanstack/react-query";
 
-interface Props {
-  storeDoc: DocumentData;
-  map: boolean;
-}
-
-const StoreInfo = ({ storeDoc, map }: Props) => {
+const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
   const [storeImage, setStoreImage] = useState<string | null>(null);
-  const averageRate = (storeDoc.ttlRate / storeDoc.ttlParticipants)
-    .toFixed(1)
-    .toString();
-
+  const { data: storeDoc } = useQuery(["storeInfo", id], () => getDocStore(id));
   useEffect(() => {
-    const refPath = `store/${storeDoc.id}`;
+    const refPath = `store/${storeDoc?.id}`;
     const getUrl = async () => {
       const url = await getThumbnailUrl(refPath);
       if (url) {
@@ -27,6 +20,13 @@ const StoreInfo = ({ storeDoc, map }: Props) => {
     };
     getUrl();
   }, [storeDoc]);
+
+  if (!storeDoc) {
+    return <div className="my-5 text-sm">업체정보가 없습니다.</div>;
+  }
+  const averageRate = (storeDoc.ttlRate / storeDoc.ttlParticipants)
+    .toFixed(1)
+    .toString();
 
   return (
     <>
@@ -37,7 +37,8 @@ const StoreInfo = ({ storeDoc, map }: Props) => {
               <Image
                 src={storeImage}
                 alt="리뷰이미지"
-                fill={true}
+                fill
+                sizes="(min-width: 768px) 150px, 130px"
                 className="object-cover"
               />
             ) : (

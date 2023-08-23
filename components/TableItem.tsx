@@ -38,9 +38,10 @@ const TableItem = ({ store, idx }: TableItemProps) => {
         {storeImage ? (
           <Image
             src={storeImage}
-            priority={idx == 0}
+            priority={idx < 2}
             alt="리뷰이미지"
-            fill={true}
+            fill
+            sizes="(min-width: 768px) 45vw, (min-width: 1024px) 30vw, 90vw "
             className="object-cover"
           />
         ) : (

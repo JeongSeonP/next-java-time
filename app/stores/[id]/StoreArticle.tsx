@@ -13,11 +13,11 @@ const StoreArticle = ({ id }: { id: string }) => {
   }
   return (
     <article>
-      <h2 className="font-semibold  mb-4 text-lg flex justify-center items-center mx-auto w-fit px-7 h-12 rounded-full shadow ">
+      <h2 className="font-semibold  mb-4 text-lg flex justify-center items-center mx-auto w-fit px-7 h-12 rounded-full bg-white shadow ">
         {storeDoc.storeName}
       </h2>
-      <StoreInfo storeDoc={storeDoc} map={true} />
-      <Review storeDoc={storeDoc} />
+      <StoreInfo id={id} map={true} />
+      <Review id={id} />
     </article>
   );
 };

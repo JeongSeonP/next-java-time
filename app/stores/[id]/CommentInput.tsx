@@ -30,7 +30,6 @@ const CommentInput = ({
   const queryClient = useQueryClient();
   const {
     register,
-    formState: { errors, isSubmitSuccessful },
     handleSubmit: onSubmit,
     reset,
   } = useForm<CommentsForm>({
@@ -52,7 +51,7 @@ const CommentInput = ({
         comment: prevComment.text,
       });
     }
-  }, []);
+  }, [prevComment, reset]);
 
   const handleSubmit = (formData: CommentsForm) => {
     if (prevComment) {

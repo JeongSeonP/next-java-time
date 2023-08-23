@@ -15,15 +15,21 @@ const ConfirmModal = ({ toggle, handleRedirect, option }: ModalProps) => {
       className={`modal z-[99999]
        ${toggle ? "visible opacity-100 pointer-events-auto" : ""}`}
     >
-      <div className="modal-box">
+      <div className="modal-box bg-[#f2e8f7]">
         <h3 className="font-bold text-lg">{option.h3}</h3>
         <p className="py-4">{option.p}</p>
         <div className="modal-action">
-          <label onClick={() => handleRedirect(true)} className="btn">
+          <label
+            onClick={() => handleRedirect(true)}
+            className="btn btn-neutral"
+          >
             {option.button}
           </label>
           {option.secondButton ? (
-            <label onClick={() => handleRedirect(false)} className="btn">
+            <label
+              onClick={() => handleRedirect(false)}
+              className="btn btn-neutral"
+            >
               {option.secondButton}
             </label>
           ) : null}

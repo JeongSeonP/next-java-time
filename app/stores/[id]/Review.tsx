@@ -1,11 +1,11 @@
 import StarRate from "@/components/StarRate";
 import { flavorList, richnessList } from "@/constants/selectOptions";
 import { ReviewDocData } from "@/interface/review";
-import { StoreDocumentData } from "@/interface/store";
-import { auth, deleteReview, getReviewList } from "@/lib/firebase";
+import { auth, deleteReview, getDocStore, getReviewList } from "@/lib/firebase";
 import {
   useInfiniteQuery,
   useMutation,
+  useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
 import { DocumentData } from "firebase/firestore";
@@ -19,10 +19,10 @@ import CommentInput from "./CommentInput";
 import Comments from "./Comments";
 import Dropdown from "./Dropdown";
 import ProfileModal from "./ProfileModal";
-
-interface ReviewProps {
-  storeDoc: StoreDocumentData;
-}
+import InformModal from "@/components/InformModal";
+import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
+import ImageModal from "./ImageModal";
+import getFormattedDate from "@/app/utils/getFormattedDate";
 
 export interface ReviewDocumentData extends DocumentData {
   reviewList: ReviewDocData[];
@@ -36,24 +36,26 @@ export interface DeleteOption {
   rating: string;
 }
 
-const Review = ({ storeDoc }: ReviewProps) => {
+const Review = ({ id }: { id: string }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [user] = useAuthState(auth);
-  const [modal, setModal] = useState(false);
+  const [confirmModal, setConfirmModal] = useState(false);
+  const [informModal, setInformModal] = useState(false);
+  const [imageModal, setImageModal] = useState<string | null | false>(false);
   const [isLast, setIsLast] = useState(false);
   const [filter, setFilter] = useState(false);
   const [sort, setSort] = useState("최신순");
   const [deleteOption, setDeleteOption] = useState<DeleteOption | null>(null);
   const sortList = ["최신순", "평점순"];
+  const { data: storeDoc } = useQuery(["storeInfo", id], () => getDocStore(id));
   const {
     data: reviewDoc,
     fetchNextPage,
     refetch,
-    isFetchingNextPage,
   } = useInfiniteQuery<ReviewDocumentData | undefined>(
-    ["reviewInfo", storeDoc.id],
-    ({ pageParam = 0 }) => getReviewList(storeDoc.id, pageParam, filter, sort),
+    ["reviewInfo", id],
+    ({ pageParam = 0 }) => getReviewList(id, pageParam, filter, sort),
     {
       getNextPageParam: (lastPage) => {
         if (lastPage) {
@@ -63,7 +65,7 @@ const Review = ({ storeDoc }: ReviewProps) => {
       },
     }
   );
-  console.log(storeDoc.id);
+
   const modalOption = {
     h3: "리뷰를 정말 삭제하시겠습니까?",
     p: "삭제하시려면 확인 버튼을 눌러주세요.",
@@ -73,7 +75,7 @@ const Review = ({ storeDoc }: ReviewProps) => {
 
   useEffect(() => {
     refetch();
-  }, [filter, sort]);
+  }, [filter, sort, refetch]);
 
   useEffect(() => {
     if (reviewDoc?.pages && reviewDoc.pages?.length > 0) {
@@ -85,16 +87,18 @@ const Review = ({ storeDoc }: ReviewProps) => {
     }
   }, [reviewDoc]);
 
-  const { mutate: reviewMutate } = useMutation(deleteReview, {
+  const { mutate: reviewMutate, isLoading } = useMutation(deleteReview, {
     onSuccess: () => {
-      queryClient.invalidateQueries(["reviewInfo", storeDoc.id]);
-      queryClient.invalidateQueries(["storeInfo", storeDoc.id]);
+      queryClient.invalidateQueries(["reviewInfo", id]);
+      queryClient.invalidateQueries(["storeInfo", id]);
+      setTimeout(() => {
+        setInformModal(false);
+      }, SHOW_MODAL_DELAY);
     },
   });
 
   const handlePage = () => {
     fetchNextPage();
-    console.log("isFetchingNextPage", isFetchingNextPage);
   };
 
   const goToReview = () => {
@@ -126,18 +130,18 @@ const Review = ({ storeDoc }: ReviewProps) => {
   };
 
   const handleDelete = (reviewID: string, rating: string) => {
-    const storeId = storeDoc.id;
+    const storeId = id;
     setDeleteOption({ storeId, reviewID, rating });
-
-    setModal(true);
+    setConfirmModal(true);
   };
 
   const confirmDelete = (answer: boolean) => {
     if (answer && deleteOption) {
-      setModal(false);
+      setConfirmModal(false);
+      setInformModal(true);
       reviewMutate(deleteOption);
     } else if (!answer) {
-      setModal(false);
+      setConfirmModal(false);
       setDeleteOption(null);
     }
   };
@@ -146,7 +150,7 @@ const Review = ({ storeDoc }: ReviewProps) => {
     <div className="md:w-full max-w-xl w-[350px] ">
       <button
         onClick={goToReview}
-        className="btn md:w-full max-w-xl w-[350px] mb-1"
+        className="btn btn-neutral text-sub-color md:w-full max-w-xl w-[350px] mb-1"
       >
         리뷰 쓰기
       </button>
@@ -157,7 +161,7 @@ const Review = ({ storeDoc }: ReviewProps) => {
               key={sortItem}
               onClick={() => setSort(sortItem)}
               className={`btn btn-ghost btn-xs  text-xs text-neutral-100 bg-base-300 hover:bg-base-200 hover:text-neutral-500
-                ${sortItem === sort ? "text-secondary-content" : ""}`}
+                ${sortItem === sort ? "text-neutral" : ""}`}
             >
               {sortItem === sort ? (
                 <BsCheck size="18" className="-ml-1" />
@@ -172,7 +176,7 @@ const Review = ({ storeDoc }: ReviewProps) => {
               !filter ? "text-neutral-500" : ""
             }`}
           >
-            포토리뷰만 보기
+            포토리뷰
           </span>
           <input
             onChange={(e) => setFilter(e.target.checked)}
@@ -199,23 +203,23 @@ const Review = ({ storeDoc }: ReviewProps) => {
                   <StarRate rate={review.rating} />
                   {user?.uid === review.user.uid ? (
                     <Dropdown>
-                      <li>
+                      <li className="w-20">
                         <div
                           onClick={() => handleRevision(review)}
-                          className="text-xs pl-2"
+                          className="text-xs mx-auto "
                         >
-                          <BsPencil size="25" />
+                          <BsPencil size="14" />
                           <p className="shrink-0">수정</p>
                         </div>
                       </li>
-                      <li className="px-0 text-error">
+                      <li className="w-20 text-error">
                         <div
                           onClick={() =>
                             handleDelete(review.reviewID, review.rating)
                           }
-                          className="text-xs pl-2"
+                          className="text-xs mx-auto"
                         >
-                          <BsTrash size="25" />
+                          <BsTrash size="14" />
                           <p className="shrink-0">삭제</p>
                         </div>
                       </li>
@@ -235,15 +239,20 @@ const Review = ({ storeDoc }: ReviewProps) => {
               </div>
               <div className="flex flex-col justify-between text-left p-2 md:indent-3 bg-[#deeaea]/60 border border-base-200 text-secondary-content rounded-xl shadow my-1 min-h-[80px]">
                 {review.image !== null ? (
-                  <div className="w-28 h-28 flex items-center justify-center bg-[#fff] overflow-hidden rounded-lg mb-2 shadow">
+                  <div
+                    onClick={() => setImageModal(review.image)}
+                    className="relative w-28 h-28 flex items-center justify-center bg-[#fff] overflow-hidden rounded-lg mb-2 shadow cursor-pointer"
+                  >
                     <Image
                       src={review.image}
                       alt="리뷰이미지"
-                      width={112}
-                      height={112}
-                    />
+                      fill
+                      sizes="112px"
+                      className="object-cover"
+                    />{" "}
                   </div>
                 ) : null}
+
                 <p>{review.text}</p>
 
                 <div className="flex justify-end items-center italic rounded-xl bg-[#d3e5e5] px-2 shadow mt-1">
@@ -252,7 +261,7 @@ const Review = ({ storeDoc }: ReviewProps) => {
                       (편집됨)
                     </p>
                   ) : null}
-                  <p>date: {review.date}</p>
+                  <p>{getFormattedDate(review.date)}</p>
                 </div>
               </div>
 
@@ -261,7 +270,7 @@ const Review = ({ storeDoc }: ReviewProps) => {
                   ? review.comments.map((comment) => (
                       <Comments
                         key={comment.commentId}
-                        storeId={storeDoc?.id}
+                        storeId={id}
                         reviewId={review.reviewID}
                         comment={comment}
                       />
@@ -270,7 +279,7 @@ const Review = ({ storeDoc }: ReviewProps) => {
               </ul>
 
               <CommentInput
-                info={{ storeId: storeDoc?.id, reviewId: review.reviewID }}
+                info={{ storeId: id, reviewId: review.reviewID }}
                 prevComment={null}
                 inputEditor={null}
               />
@@ -287,10 +296,14 @@ const Review = ({ storeDoc }: ReviewProps) => {
         </button>
       ) : null}
       <ConfirmModal
-        toggle={modal}
+        toggle={confirmModal}
         handleRedirect={confirmDelete}
         option={modalOption}
       />
+      {informModal && (
+        <InformModal loading={isLoading} inform={"삭제 되었습니다!"} />
+      )}
+      {imageModal && <ImageModal src={imageModal} toggle={setImageModal} />}
     </div>
   );
 };

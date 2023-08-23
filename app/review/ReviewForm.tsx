@@ -19,7 +19,6 @@ import InformModal from "@/components/InformModal";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);
-  // const queryClient = getQueryClient();
   const queryClient = useQueryClient();
   const router = useRouter();
   const [existingReview, setExistingReview] = useState<RevisionOption | null>(
@@ -123,7 +122,7 @@ const ReviewForm = () => {
       return;
     }
     setInform("리뷰가 등록되었습니다!");
-    const createdDate = new Date().toLocaleDateString("en-US");
+    const createdDate = new Date().toLocaleString("en-US");
     const { rating, flavor, richness, text } = formData;
     const { x, y, id, phone, storeName, address } = store;
     const stations: string[] = await getStation(x, y);

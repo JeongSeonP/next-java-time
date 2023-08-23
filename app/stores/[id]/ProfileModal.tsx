@@ -4,7 +4,7 @@ import { getDocUser } from "@/lib/firebase";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
-import { BsCheckCircleFill } from "react-icons/Bs";
+import { BsCheckCircleFill, BsFillPersonFill } from "react-icons/Bs";
 
 interface UserData {
   email: string;
@@ -19,11 +19,10 @@ interface ProfileModalProps {
 
 const ProfileModal = ({ user }: ProfileModalProps) => {
   const [toggle, setToggle] = useState(false);
-  const { data: userDoc } = useQuery<UserDocumentData | undefined>(
+  const { data: userDoc } = useQuery<UserDocumentData | null | undefined>(
     ["user", user.uid],
     () => getDocUser(user.uid)
   );
-
   return (
     <>
       <div
@@ -32,7 +31,6 @@ const ProfileModal = ({ user }: ProfileModalProps) => {
       >
         {user.displayName ?? user.email}
       </div>
-      <div>{user.uid}</div>
       <div
         onClick={() => setToggle(false)}
         className={`modal z-[99999] bg-transparent"
@@ -45,30 +43,26 @@ const ProfileModal = ({ user }: ProfileModalProps) => {
           >
             ✕
           </label>
-          <div className="font-bold text-lg mb-2">
+          <div className="font-bold text-lg mb-4">
             <span> {user.displayName ?? user.email}</span>
             <span> 님</span>{" "}
           </div>{" "}
-          <div className="w-28 h-28 mx-auto rounded-full overflow-hidden bg-[#fff] text-primary shadow-lg">
+          <div className="relative w-28 h-28 mx-auto rounded-full overflow-hidden bg-[#fff] text-primary shadow-lg">
             {user?.photo ? (
               <Image
                 src={user.photo}
-                width={112}
-                height={112}
+                fill
+                sizes="112px"
                 alt="프로필이미지"
+                className="object-cover"
               />
             ) : (
-              <svg
-                className="w-28 mt-2"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
-              </svg>
+              <BsFillPersonFill size="112" className="mt-2" />
             )}
           </div>
-          {userDoc?.isPublic ? (
+          {!userDoc ? (
+            <p className="mt-4 py-4 text-sm">작성된 프로필이 없습니다.</p>
+          ) : userDoc?.isPublic ? (
             <div className="font-semibold mr-2 mt-6 text-sm">
               <p>
                 <i className="ico-coffeeBean mr-1"></i>나의 커피취향은?
