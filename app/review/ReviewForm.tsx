@@ -11,11 +11,11 @@ import { MdError } from "react-icons/Md";
 import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { getStation } from "@/lib/kakaoAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import getQueryClient from "@/app/utils/getQueryClient";
 import { useRouter } from "next/navigation";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import ImageUploader, { Imagefile } from "@/components/ImageUploader";
 import InformModal from "@/components/InformModal";
+import imageCompression from "browser-image-compression";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);
@@ -102,7 +102,10 @@ const ReviewForm = () => {
     try {
       if (isUpload) {
         if (imgFile?.file) {
-          await uploadBytes(imageRef, imgFile.file);
+          const resizedBlob = await imageCompression(imgFile.file, {
+            maxSizeMB: 0.5,
+          });
+          await uploadBytes(imageRef, resizedBlob);
         }
       } else {
         await deleteObject(imageRef);
@@ -122,7 +125,7 @@ const ReviewForm = () => {
       return;
     }
     setInform("리뷰가 등록되었습니다!");
-    const createdDate = new Date().toLocaleString("en-US");
+    const createdDate = Number(new Date());
     const { rating, flavor, richness, text } = formData;
     const { x, y, id, phone, storeName, address } = store;
     const stations: string[] = await getStation(x, y);
