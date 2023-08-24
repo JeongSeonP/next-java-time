@@ -27,11 +27,13 @@ import {
   CommentProp,
   ReviewDocData,
   ReviewDocProp,
+  ReviewDocumentData,
   UpdateCommentProp,
 } from "@/interface/review";
 import { UserDocProp, UserDocumentData } from "@/interface/user";
 import Cookie from "js-cookie";
 import { StoreDocumentData } from "@/interface/store";
+import { DeleteOption } from "@/app/stores/[id]/Review";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
@@ -110,8 +112,8 @@ export const deleteReview = async ({
       ttlRate: increment(-Number(rating)),
       ttlParticipants: increment(-1),
     });
-  } catch (e) {
-    throw new Error("Error");
+  } catch (error) {
+    throw new Error(`deleteReview Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
@@ -147,8 +149,8 @@ export const updateComment = async ({
         }
       }
     }
-  } catch (e) {
-    throw new Error("Error");
+  } catch (error) {
+    throw new Error(`updateComment Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
@@ -186,16 +188,17 @@ export const getReviewList = async (
       if (reviewList.length === perPage + 1) {
         reviewList.splice(5, 1);
       }
-      const result: ReviewDocData = {
+      const result: ReviewDocumentData = {
         reviewList: reviewList,
         nextPage: nextPage,
         hasNextPage: hasNextPage,
       };
 
       return result;
-    } catch (e) {
-      console.log(e);
-      throw new Error("Error");
+    } catch (error) {
+      throw new Error(
+        `getReviewList Error: Time(${new Date()}) ERROR ${error}`
+      );
     }
   } else if (pageParam !== 0) {
     try {
@@ -239,8 +242,10 @@ export const getReviewList = async (
         };
         return result;
       }
-    } catch (e) {
-      throw new Error("Error");
+    } catch (error) {
+      throw new Error(
+        `getReviewList Error: Time(${new Date()}) ERROR ${error}`
+      );
     }
   }
 };

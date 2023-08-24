@@ -1,6 +1,6 @@
 import StarRate from "@/components/StarRate";
 import { flavorList, richnessList } from "@/constants/selectOptions";
-import { ReviewDocData } from "@/interface/review";
+import { ReviewDocData, ReviewDocumentData } from "@/interface/review";
 import { auth, deleteReview, getDocStore, getReviewList } from "@/lib/firebase";
 import {
   useInfiniteQuery,
@@ -23,12 +23,6 @@ import InformModal from "@/components/InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import ImageModal from "./ImageModal";
 import getFormattedDate from "@/app/utils/getFormattedDate";
-
-export interface ReviewDocumentData extends DocumentData {
-  reviewList: ReviewDocData[];
-  nextPage: string;
-  hasNextPage: boolean;
-}
 
 export interface DeleteOption {
   storeId: string;
@@ -65,7 +59,6 @@ const Review = ({ id }: { id: string }) => {
       },
     }
   );
-
   const modalOption = {
     h3: "리뷰를 정말 삭제하시겠습니까?",
     p: "삭제하시려면 확인 버튼을 눌러주세요.",
@@ -160,8 +153,8 @@ const Review = ({ id }: { id: string }) => {
             <button
               key={sortItem}
               onClick={() => setSort(sortItem)}
-              className={`btn btn-ghost btn-xs  text-xs text-neutral-100 bg-base-300 hover:bg-base-200 hover:text-neutral-500
-                ${sortItem === sort ? "text-neutral" : ""}`}
+              className={`btn btn-ghost btn-xs  text-xs  bg-base-300 hover:bg-base-200 hover:text-neutral-500
+                ${sortItem === sort ? "text-neutral" : "text-neutral-100"}`}
             >
               {sortItem === sort ? (
                 <BsCheck size="18" className="-ml-1" />
@@ -188,7 +181,7 @@ const Review = ({ id }: { id: string }) => {
       </div>
       <ul className=" text-xs md:text-sm">
         {reviewDoc?.pages.map((page) =>
-          page?.reviewList.map((review: ReviewDocData) => (
+          page?.reviewList.map((review: ReviewDocData, idx) => (
             <li
               key={review.reviewID}
               className="w-full text-right border-2 border-base-200 rounded-xl bg-[#fff] my-1 p-3"
@@ -246,6 +239,7 @@ const Review = ({ id }: { id: string }) => {
                     <Image
                       src={review.image}
                       alt="리뷰이미지"
+                      priority={idx === 0}
                       fill
                       sizes="112px"
                       className="object-cover"
@@ -261,7 +255,7 @@ const Review = ({ id }: { id: string }) => {
                       (편집됨)
                     </p>
                   ) : null}
-                  <p>{getFormattedDate(review.date)}</p>
+                  <p>{getFormattedDate(review.date, new Date())}</p>
                 </div>
               </div>
 

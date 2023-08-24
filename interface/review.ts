@@ -1,5 +1,6 @@
 import { FlavorCode, RichnessCode } from "@/constants/selectOptions";
 import { StoreDoc } from "./store";
+import { DocumentData } from "firebase/firestore";
 
 export interface ReviewForm {
   rating: string;
@@ -9,7 +10,7 @@ export interface ReviewForm {
 }
 export interface ReviewDoc {
   reviewID: string;
-  date: string;
+  date: number;
   user: {
     email: string | null | undefined;
     displayName: string | null | undefined;
@@ -26,7 +27,7 @@ export interface ReviewDoc {
 }
 export interface ReviewDocData {
   reviewID: string;
-  date: string;
+  date: number;
   user: {
     email: string;
     displayName: string | null;
@@ -60,7 +61,7 @@ export interface UpdateCommentProp {
 
 export interface CommentProp {
   text: string;
-  date: string;
+  date: number;
   commentId: number;
   userInfo: {
     displayName: string | null;
@@ -77,4 +78,10 @@ export interface RevisionOption {
   richness: "rich" | "bland" | "bitter";
   text: string;
   img: string | null;
+}
+
+export interface ReviewDocumentData extends DocumentData {
+  reviewList: ReviewDocData[];
+  nextPage: string;
+  hasNextPage: boolean;
 }

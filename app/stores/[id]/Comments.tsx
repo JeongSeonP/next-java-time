@@ -5,6 +5,7 @@ import { auth, updateComment } from "@/lib/firebase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CommentInput from "./CommentInput";
 import Dropdown from "./Dropdown";
+import getFormattedDate from "@/app/utils/getFormattedDate";
 
 interface Prop {
   storeId: string;
@@ -54,7 +55,9 @@ const Comments = ({ storeId, reviewId, comment }: Prop) => {
               (편집됨)
             </span>
           ) : null}
-          <span className="text-[10px]">{comment.date}</span>
+          <span className="text-[10px]">
+            {getFormattedDate(comment.date, new Date())}
+          </span>
           {user?.uid === comment.userInfo.uid ? (
             <Dropdown>
               <li>

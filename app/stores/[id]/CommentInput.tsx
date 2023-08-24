@@ -66,9 +66,7 @@ const CommentInput = ({
     if (!user) return;
     const { displayName, email, uid } = user;
     const { comment } = formData;
-    const createdDate = `${new Date().toLocaleDateString(
-      "en-US"
-    )} ${new Date().toLocaleTimeString("en-GB")}`;
+    const createdDate = Number(new Date());
     const commentDoc: CommentProp = {
       text: comment,
       date: createdDate,
