@@ -3,9 +3,10 @@
 import { usePathname } from "next/navigation";
 import { BiUpArrowAlt } from "react-icons/bi";
 
-const Topbtn = () => {
+const TopBtn = () => {
   const pathname = usePathname();
-  const path = pathname !== "/login" && pathname !== "/join" ? true : false;
+  const exceptPath = ["/login", "/join", "/mypage"];
+  const path = exceptPath.includes(pathname) ? false : true;
 
   if (!path) return;
 
@@ -23,4 +24,4 @@ const Topbtn = () => {
     </>
   );
 };
-export default Topbtn;
+export default TopBtn;

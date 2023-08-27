@@ -323,8 +323,8 @@ export const setDocUser = async ({ uid, userDoc }: UserDocProp) => {
   const userRef = doc(db, "users", uid);
   try {
     await setDoc(userRef, userDoc);
-  } catch (e) {
-    throw new Error("Error");
+  } catch (error) {
+    throw new Error(`setDocUser Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 

@@ -10,12 +10,11 @@ import MyMenu from "./MyMenu";
 const Header = () => {
   const [toggle, setToggle] = useState(false);
   const pathname = usePathname();
-  // const path = true;
   const path = pathname !== "/" && pathname !== "/reviewsearch" ? true : false;
 
-  useEffect(() => {
-    setToggle(false);
-  }, [pathname]);
+  // useEffect(() => {
+  //   setToggle(false);
+  // }, [pathname]);
 
   return (
     <header className="h-24 p-4 bg-base-200 fixed top-0 left-0 right-0 z-[9999] shadow">

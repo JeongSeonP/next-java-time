@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/lib/firebase";
-import Cookie from "js-cookie";
 
 const MyMenu = () => {
   const [isLogin] = useAuthState(auth);
