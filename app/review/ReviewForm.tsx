@@ -5,17 +5,15 @@ import { useForm } from "react-hook-form";
 import { ReviewForm, RevisionOption } from "@/interface/review";
 import { useEffect, useState } from "react";
 import { flavorList, richnessList } from "@/constants/selectOptions";
-import { auth, getImgUrl, setDocReview, storage } from "@/lib/firebase";
+import { auth, getImgUrl, setDocReview, updateImg } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { MdError } from "react-icons/Md";
-import { deleteObject, ref, uploadBytes } from "firebase/storage";
 import { getStation } from "@/lib/kakaoAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import ImageUploader, { Imagefile } from "@/components/ImageUploader";
 import InformModal from "@/components/InformModal";
-import imageCompression from "browser-image-compression";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);
@@ -97,24 +95,6 @@ const ReviewForm = () => {
     }
   }, [existingReview, reset]);
 
-  const updateImg = async (isUpload: boolean, reviewID: string) => {
-    const imageRef = ref(storage, `store/${store.id}/${reviewID}`);
-    try {
-      if (isUpload) {
-        if (imgFile?.file) {
-          const resizedBlob = await imageCompression(imgFile.file, {
-            maxSizeMB: 0.5,
-          });
-          await uploadBytes(imageRef, resizedBlob);
-        }
-      } else {
-        await deleteObject(imageRef);
-      }
-    } catch (error) {
-      throw new Error(`updateImg Error: Time(${new Date()}) ERROR ${error}`);
-    }
-  };
-
   const handleSubmit = async (formData: ReviewForm) => {
     if (store.id == "") {
       setInform("선택된 카페가 없습니다.");
@@ -137,14 +117,16 @@ const ReviewForm = () => {
       ? existingReview.reviewID
       : `${id}_${Date.now()}`;
 
-    if (imgFile) {
-      await updateImg(true, reviewID);
-    } else if (!imgFile && existingReview?.img) {
-      await updateImg(false, reviewID);
+    const imageDoc = {
+      isUpload: imgFile ? true : !imgFile && existingReview?.img ? false : null,
+      refPath: `store/${store.id}/${reviewID}`,
+      imageFile: imgFile?.file,
+    };
+
+    if (imageDoc.isUpload != null) {
+      await updateImg(imageDoc);
     }
-    const url = imgFile
-      ? await getImgUrl(`store/${store.id}/${reviewID}`)
-      : null;
+    const url = imgFile ? await getImgUrl(imageDoc.refPath) : null;
 
     const newDoc = {
       id: id,

@@ -1,6 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { getDownloadURL, getStorage, list, ref } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  list,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 // import { DeleteOption, ReviewDocumentData } from "../components/Review";
 // import { FlavorCode, RichnessCode } from "../components/SelectOptions";
 // import { UserDocumentData } from "../pages/MyPage";
@@ -25,6 +32,7 @@ import {
 } from "firebase/firestore";
 import {
   CommentProp,
+  ImageDoc,
   ReviewDocData,
   ReviewDocProp,
   ReviewDocumentData,
@@ -34,6 +42,7 @@ import { UserDocProp, UserDocumentData } from "@/interface/user";
 import Cookie from "js-cookie";
 import { StoreDocumentData } from "@/interface/store";
 import { DeleteOption } from "@/app/stores/[id]/Review";
+import imageCompression from "browser-image-compression";
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
@@ -340,6 +349,25 @@ export const getDocUser = async (uid: string | undefined) => {
     }
   } catch (error) {
     throw new Error(`getDocUser Error: Time(${new Date()}) ERROR ${error}`);
+  }
+};
+
+export const updateImg = async ({ isUpload, refPath, imageFile }: ImageDoc) => {
+  if (isUpload == null) return;
+  const imageRef = ref(storage, refPath);
+  try {
+    if (isUpload) {
+      if (imageFile) {
+        const resizedBlob = await imageCompression(imageFile, {
+          maxSizeMB: 0.5,
+        });
+        await uploadBytes(imageRef, resizedBlob);
+      }
+    } else {
+      await deleteObject(imageRef);
+    }
+  } catch (error) {
+    throw new Error(`updateImg Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 

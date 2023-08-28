@@ -85,3 +85,9 @@ export interface ReviewDocumentData extends DocumentData {
   nextPage: string;
   hasNextPage: boolean;
 }
+
+export interface ImageDoc {
+  isUpload: boolean | null;
+  refPath: string;
+  imageFile: File | undefined | null;
+}
