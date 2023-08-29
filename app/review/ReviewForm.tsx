@@ -5,7 +5,13 @@ import { useForm } from "react-hook-form";
 import { ReviewForm, RevisionOption } from "@/interface/review";
 import { useEffect, useState } from "react";
 import { flavorList, richnessList } from "@/constants/selectOptions";
-import { auth, getImgUrl, setDocReview, updateImg } from "@/lib/firebase";
+import {
+  auth,
+  deleteImg,
+  getImgUrl,
+  setDocReview,
+  updateImg,
+} from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { MdError } from "react-icons/Md";
 import { getStation } from "@/lib/kakaoAPI";
@@ -117,16 +123,19 @@ const ReviewForm = () => {
       ? existingReview.reviewID
       : `${id}_${Date.now()}`;
 
-    const imageDoc = {
-      isUpload: imgFile ? true : !imgFile && existingReview?.img ? false : null,
-      refPath: `store/${store.id}/${reviewID}`,
-      imageFile: imgFile?.file,
-    };
+    const imgRef = `store/${store.id}/${reviewID}`;
 
-    if (imageDoc.isUpload != null) {
+    if (imgFile?.file) {
+      const imageDoc = {
+        refPath: imgRef,
+        imageFile: imgFile.file,
+      };
       await updateImg(imageDoc);
+    } else if (!imgFile && existingReview?.img) {
+      await deleteImg(imgRef);
     }
-    const url = imgFile ? await getImgUrl(imageDoc.refPath) : null;
+
+    const url = imgFile ? await getImgUrl(imgRef) : null;
 
     const newDoc = {
       id: id,

@@ -337,8 +337,8 @@ export const setDocUser = async ({ uid, userDoc }: UserDocProp) => {
   }
 };
 
-export const getDocUser = async (uid: string | undefined) => {
-  if (uid === undefined) return;
+export const getDocUser = async (uid: string | undefined | null) => {
+  if (!uid) return null;
   const userRef = doc(db, "users", uid);
   try {
     const docSnap = await getDoc(userRef);
@@ -352,22 +352,24 @@ export const getDocUser = async (uid: string | undefined) => {
   }
 };
 
-export const updateImg = async ({ isUpload, refPath, imageFile }: ImageDoc) => {
-  if (isUpload == null) return;
+export const updateImg = async ({ refPath, imageFile }: ImageDoc) => {
   const imageRef = ref(storage, refPath);
   try {
-    if (isUpload) {
-      if (imageFile) {
-        const resizedBlob = await imageCompression(imageFile, {
-          maxSizeMB: 0.5,
-        });
-        await uploadBytes(imageRef, resizedBlob);
-      }
-    } else {
-      await deleteObject(imageRef);
-    }
+    const resizedBlob = await imageCompression(imageFile, {
+      maxSizeMB: 0.5,
+    });
+    await uploadBytes(imageRef, resizedBlob);
   } catch (error) {
     throw new Error(`updateImg Error: Time(${new Date()}) ERROR ${error}`);
+  }
+};
+
+export const deleteImg = async (refPath: string) => {
+  const imageRef = ref(storage, refPath);
+  try {
+    await deleteObject(imageRef);
+  } catch (error) {
+    throw new Error(`deleteImg Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
