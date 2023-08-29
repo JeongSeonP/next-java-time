@@ -4,15 +4,22 @@ import ImageUploader, { Imagefile } from "@/components/ImageUploader";
 import InformModal from "@/components/InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import { favoriteFlavor, favoriteType } from "@/constants/selectOptions";
-import { auth, getImgUrl, setDocUser, updateImg } from "@/lib/firebase";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  auth,
+  deleteImg,
+  getDocUser,
+  getImgUrl,
+  setDocUser,
+  updateImg,
+} from "@/lib/firebase";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuthState, useUpdateProfile } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 
 interface ProfileForm {
-  displayName: string;
+  displayName: string | null;
   flavor: string;
   type: string;
   isPublic: boolean;
@@ -23,8 +30,18 @@ const ProfileForm = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const [modal, setModal] = useState(false);
+  const existingPhotoURL = useRef(false);
   const [imgFile, setImgFile] = useState<Imagefile | null>(null);
-  const [updateProfile, updating, profileError] = useUpdateProfile(auth);
+  const [updateProfile, updating] = useUpdateProfile(auth);
+  const { data: userDoc } = useQuery(["user", user?.uid], () =>
+    getDocUser(user?.uid)
+  );
+  const [initialValue, setInitialValue] = useState({
+    displayName: "",
+    flavor: "",
+    type: "",
+    isPublic: true,
+  });
   const { mutate: userMutate, isLoading } = useMutation(setDocUser, {
     onSuccess: () => {
       queryClient.invalidateQueries(["user", user?.uid]);
@@ -36,17 +53,32 @@ const ProfileForm = () => {
   const {
     register,
     handleSubmit: onSubmit,
+    reset,
     watch,
   } = useForm<ProfileForm>({
     mode: "onSubmit",
-    defaultValues: {
-      displayName: "",
-      flavor: "",
-      type: "",
-      isPublic: true,
-    },
+    defaultValues: initialValue,
   });
   const isPublic = watch("isPublic");
+
+  useEffect(() => {
+    if (userDoc || user) {
+      reset({
+        displayName: user?.displayName ?? "",
+        flavor: userDoc?.favoriteFlavor ?? "",
+        type: userDoc?.favoriteType ?? "",
+        isPublic: userDoc?.isPublic ?? true,
+      });
+    }
+    if (user?.photoURL) {
+      existingPhotoURL.current = true;
+      setImgFile({
+        file: null,
+        thumbnail: user.photoURL,
+        name: "existingPhoto",
+      });
+    }
+  }, [user, userDoc, reset]);
 
   const handleSubmit = async (formData: ProfileForm) => {
     if (!user) return;
@@ -58,16 +90,16 @@ const ProfileForm = () => {
       isPublic: isPublic,
     };
 
-    if (imgFile) {
+    if (imgFile?.file) {
       const imageDoc = {
-        isUpload: true,
         refPath: `user/${uid}`,
-        imageFile: imgFile.file,
+        imageFile: imgFile?.file,
       };
       await updateImg(imageDoc);
       const photoURL = await getImgUrl(imageDoc.refPath);
       await updateProfile({ displayName, photoURL });
-    } else {
+    } else if (!imgFile && existingPhotoURL) {
+      await deleteImg(`user/${uid}`);
       await updateProfile({ displayName, photoURL: "" });
     }
     userMutate({ uid, userDoc });
@@ -170,7 +202,10 @@ const ProfileForm = () => {
         프로필 등록
       </button>
       {modal && (
-        <InformModal loading={isLoading} inform={"프로필이 등록되었습니다!"} />
+        <InformModal
+          loading={updating || isLoading}
+          inform={"프로필이 등록되었습니다!"}
+        />
       )}
     </form>
   );
