@@ -10,10 +10,10 @@ import {
   useCreateUserWithEmailAndPassword,
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
-import InformModal from "../../components/common/InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import { MdError } from "react-icons/Md";
 import { IoIosClose } from "react-icons/Io";
+import InformModal from "@/components/InformModal";
 
 const JoinForm = () => {
   const joinSchema = Yup.object({
@@ -55,7 +55,7 @@ const JoinForm = () => {
 
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
-  const [updateProfile, updating, profileError] = useUpdateProfile(auth);
+  const [updateProfile] = useUpdateProfile(auth);
   const router = useRouter();
 
   useEffect(() => {
@@ -81,10 +81,10 @@ const JoinForm = () => {
     }
   }, [user, error, router, setFocus]);
 
-  const handleJoin = (formData: JoinFormData) => {
+  const handleJoin = async (formData: JoinFormData) => {
     setModal(true);
-    createUserWithEmailAndPassword(formData.email, formData.password);
-    updateProfile({ displayName: formData.displayName });
+    await createUserWithEmailAndPassword(formData.email, formData.password);
+    await updateProfile({ displayName: formData.displayName });
   };
 
   return (
