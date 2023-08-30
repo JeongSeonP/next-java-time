@@ -82,7 +82,7 @@ export interface RevisionOption {
 
 export interface ReviewDocumentData extends DocumentData {
   reviewList: ReviewDocData[];
-  nextPage: string;
+  nextPageParam: string;
   hasNextPage: boolean;
 }
 

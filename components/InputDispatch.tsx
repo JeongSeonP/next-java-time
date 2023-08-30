@@ -1,23 +1,17 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { searchedInput } from "@/recoilStore/SearchInputAtom";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import SearchInput from "./SearchInput";
 
 const InputDispatch = () => {
-  const [searchInput, setSearchInput] = useRecoilState(searchedInput);
+  const [searchInput, setSearchInput] = useState("");
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/reviewsearch");
+    router.push(`/stores?search=${searchInput}`);
   };
-
-  // useEffect(() => {
-  //   setSearchInput("");
-  // }, [setSearchInput]);
 
   return (
     <div className="relative ">

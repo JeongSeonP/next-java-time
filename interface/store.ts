@@ -21,3 +21,9 @@ export interface StoreDocumentData extends DocumentData {
   ttlParticipants: number;
   ttlRate: number;
 }
+
+export interface StoreSearchDocumentData extends DocumentData {
+  storeList: string[];
+  nextPage: string;
+  hasNextPage: boolean;
+}

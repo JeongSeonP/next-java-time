@@ -54,7 +54,7 @@ const Review = ({ id }: { id: string }) => {
       getNextPageParam: (lastPage) => {
         if (lastPage) {
           if (lastPage.reviewList.length < 5) return null;
-          return lastPage.nextPage;
+          return lastPage.nextPageParam;
         }
       },
     }

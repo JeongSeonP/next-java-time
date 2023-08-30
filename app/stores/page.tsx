@@ -1,7 +1,15 @@
-import React from "react";
+import StorePageSearch from "./StorePageSearch";
 
-const StorePage = () => {
-  return <div>StorePage</div>;
+const StoresPage = () => {
+  return (
+    <main className="pt-10 pb-20 ">
+      <div className=" mx-auto text-center">
+        <div className="flex flex-col justify-center items-center">
+          <StorePageSearch />
+        </div>
+      </div>
+    </main>
+  );
 };
 
-export default StorePage;
+export default StoresPage;

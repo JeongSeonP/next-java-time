@@ -29,6 +29,7 @@ import {
   deleteDoc,
   arrayUnion,
   arrayRemove,
+  or,
 } from "firebase/firestore";
 import {
   CommentProp,
@@ -40,7 +41,7 @@ import {
 } from "@/interface/review";
 import { UserDocProp, UserDocumentData } from "@/interface/user";
 import Cookie from "js-cookie";
-import { StoreDocumentData } from "@/interface/store";
+import { StoreDocumentData, StoreSearchDocumentData } from "@/interface/store";
 import { DeleteOption } from "@/app/stores/[id]/Review";
 import imageCompression from "browser-image-compression";
 
@@ -173,8 +174,8 @@ export const getReviewList = async (
   const perPage = 5;
   const sortBy = sort === "최신순" ? "date" : "rating";
 
-  if (pageParam === 0) {
-    try {
+  try {
+    if (pageParam === 0) {
       const qAll = query(
         collection(db, "stores", id, "review"),
         orderBy(sortBy, "desc"),
@@ -192,25 +193,20 @@ export const getReviewList = async (
         doc.data()
       ) as ReviewDocData[];
       const lastDoc = snapShot.docs[perPage - 1];
-      const nextPage = lastDoc ? lastDoc.data().reviewID : null;
-      const hasNextPage = nextPage ? reviewList.length === perPage + 1 : false;
+      const nextPageParam = lastDoc ? lastDoc.data().reviewID : null;
+      const hasNextPage = nextPageParam
+        ? reviewList.length === perPage + 1
+        : false;
       if (reviewList.length === perPage + 1) {
         reviewList.splice(5, 1);
       }
       const result: ReviewDocumentData = {
         reviewList: reviewList,
-        nextPage: nextPage,
+        nextPageParam: nextPageParam,
         hasNextPage: hasNextPage,
       };
-
       return result;
-    } catch (error) {
-      throw new Error(
-        `getReviewList Error: Time(${new Date()}) ERROR ${error}`
-      );
-    }
-  } else if (pageParam !== 0) {
-    try {
+    } else if (pageParam !== 0) {
       const startAfterRef = doc(db, "stores", id, "review", String(pageParam));
       const startAfterSnap = await getDoc(startAfterRef);
 
@@ -236,8 +232,8 @@ export const getReviewList = async (
         ) as ReviewDocData[];
 
         const lastDoc = nextSnapShot.docs[perPage - 1];
-        const nextPage = lastDoc ? lastDoc.data().reviewID : null;
-        const hasNextPage = nextPage
+        const nextPageParam = lastDoc ? lastDoc.data().reviewID : null;
+        const hasNextPage = nextPageParam
           ? reviewList.length === perPage + 1
           : false;
 
@@ -246,16 +242,14 @@ export const getReviewList = async (
         }
         const result: ReviewDocumentData = {
           reviewList: reviewList,
-          nextPage: nextPage,
+          nextPageParam: nextPageParam,
           hasNextPage: hasNextPage,
         };
         return result;
       }
-    } catch (error) {
-      throw new Error(
-        `getReviewList Error: Time(${new Date()}) ERROR ${error}`
-      );
     }
+  } catch (error) {
+    throw new Error(`getReviewList Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
@@ -291,39 +285,59 @@ export const getMostPopularStores = async () => {
   }
 };
 
-export const findStoreByName = async (storeName: string) => {
+export const findStore = async (
+  pageParam: number,
+  searchInput: string | null
+) => {
+  if (!searchInput) return;
+
+  let searchForStation = searchInput;
+  const lastWord = searchForStation[searchForStation.length - 1];
+  if (lastWord !== "역") {
+    searchForStation += "역";
+  }
   const q = query(
     collection(db, "stores"),
-    where("storeName", "==", storeName),
+    or(
+      where("storeName", "==", searchInput),
+      where("stationList", "array-contains", searchForStation)
+    ),
     orderBy("ttlParticipants", "desc")
   );
   try {
     const docSnap = await getDocs(q);
-    const storeList = docSnap.docs.map((doc) => doc.data());
-    return storeList;
-  } catch (e) {
-    console.log(e);
-    throw new Error("Error");
+    const storeList = docSnap.docs.map((doc) => doc.data().id);
+    const result: StoreSearchDocumentData = {
+      storeList: storeList,
+      nextPage: "test",
+      hasNextPage: true,
+    };
+    return result;
+  } catch (error) {
+    throw new Error(`findStore Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
-export const findStoreByStation = async (station: string) => {
-  const lastword = station[station.length - 1];
-  if (lastword !== "역") {
-    station += "역";
+export const findStoreA = async (searchInput: string) => {
+  let searchForStation = searchInput;
+  const lastWord = searchForStation[searchForStation.length - 1];
+  if (lastWord !== "역") {
+    searchForStation += "역";
   }
   const q = query(
     collection(db, "stores"),
-    where("stationList", "array-contains", station),
+    or(
+      where("storeName", "==", searchInput),
+      where("stationList", "array-contains", searchForStation)
+    ),
     orderBy("ttlParticipants", "desc")
   );
   try {
     const docSnap = await getDocs(q);
-    const storeList = docSnap.docs.map((doc) => doc.data());
+    const storeList = docSnap.docs.map((doc) => doc.data().id);
     return storeList;
-  } catch (e) {
-    console.log(e);
-    throw new Error("Error");
+  } catch (error) {
+    throw new Error(`findStore Error: Time(${new Date()}) ERROR ${error}`);
   }
 };
 
