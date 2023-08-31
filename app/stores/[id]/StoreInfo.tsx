@@ -37,6 +37,7 @@ const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
               <Image
                 src={storeImage}
                 alt="리뷰이미지"
+                priority
                 fill
                 sizes="(min-width: 768px) 150px, 130px"
                 className="object-cover"

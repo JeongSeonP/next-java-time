@@ -19,5 +19,5 @@ export function middleware(request: NextRequestWithCookie) {
 }
 
 export const config = {
-  matcher: ["/mypage", "/review"],
+  matcher: ["/mypage", "/review", "/profile"],
 };

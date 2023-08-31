@@ -8,12 +8,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { auth } from "@/lib/firebase";
 import {
   useSignInWithEmailAndPassword,
+  useSignInWithGithub,
   useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
 import { IoIosClose } from "react-icons/Io";
 import { FcGoogle } from "react-icons/Fc";
 import { MdError } from "react-icons/Md";
 import { CgSpinner } from "react-icons/Cg";
+import { VscGithub } from "react-icons/Vsc";
 
 const LoginForm = () => {
   const loginSchema = Yup.object({
@@ -42,18 +44,23 @@ const LoginForm = () => {
   const router = useRouter();
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
-  const [signInWithGoogle, GoogleUser, GoogleLoading, GoogleError] =
+  const [signInWithGoogle, googleUser, googleLoading, googleError] =
     useSignInWithGoogle(auth);
+  const [signInWithGithub, githubUser, githubLoading, githubError] =
+    useSignInWithGithub(auth);
   const pathname = usePathname();
 
   useEffect(() => {
-    if (user || GoogleUser) {
+    if (user || googleUser || githubUser) {
       pathname !== "/login" ? router.refresh() : router.replace("/");
     }
 
-    if (!error && !GoogleError) return;
-    const errorCode = error ? error.code : GoogleError?.code;
+    if (!error && !googleError && !githubError) return;
+    const errorCode = error
+      ? error.code
+      : googleError?.code ?? githubError?.code;
 
+    console.log(errorCode);
     switch (errorCode) {
       case "auth/user-not-found":
         setErrorMsg("가입되지 않은 사용자입니다.");
@@ -63,8 +70,21 @@ const LoginForm = () => {
         setErrorMsg("비밀번호가 올바르지 않습니다.");
         setFocus("password");
         break;
+      case "auth/account-exists-with-different-credential":
+        setErrorMsg("이미 가입된 이메일계정입니다.");
+        break;
     }
-  }, [user, error, GoogleUser, GoogleError, setFocus, router, pathname]);
+  }, [
+    user,
+    googleUser,
+    githubUser,
+    error,
+    googleError,
+    githubError,
+    setFocus,
+    router,
+    pathname,
+  ]);
 
   useEffect(() => {
     const errorMessage = errors.email?.message
@@ -80,6 +100,10 @@ const LoginForm = () => {
 
   const handleGoogleLogin = () => {
     signInWithGoogle();
+  };
+
+  const handleGithubLogin = () => {
+    signInWithGithub();
   };
 
   return (
@@ -148,15 +172,28 @@ const LoginForm = () => {
       <div className="divider my-1 text-xs">OR</div>
       <button
         onClick={handleGoogleLogin}
-        className="relative btn btn-neutral text-sub-color w-full rounded-full shadow-md no-animation my-2"
+        className="relative btn btn-neutral text-sub-color w-full rounded-full shadow-md no-animation mt-2"
       >
         <FcGoogle size="18" className="absolute left-12" />
-        {GoogleLoading ? (
+        {googleLoading ? (
           <div className="animate-spin text-base">
             <CgSpinner />
           </div>
         ) : (
           "구글 로그인"
+        )}
+      </button>
+      <button
+        onClick={handleGithubLogin}
+        className="relative btn btn-neutral text-sub-color w-full rounded-full shadow-md no-animation my-2"
+      >
+        <VscGithub size="18" className="absolute left-12 text-white" />
+        {githubLoading ? (
+          <div className="animate-spin text-base">
+            <CgSpinner />
+          </div>
+        ) : (
+          "깃헙 로그인"
         )}
       </button>
     </>

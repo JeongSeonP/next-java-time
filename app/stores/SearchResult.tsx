@@ -71,7 +71,7 @@ const SearchResult = () => {
               <li
                 key={store}
                 onClick={() => router.push(`/stores/${store}`)}
-                className="cursor-pointer hover:bg-[#fff] transition duration-300 ease-in-out rounded-2xl pt-1 pl-1"
+                className="cursor-pointer hover:bg-white transition duration-300 ease-in-out rounded-2xl pt-1 pl-1"
               >
                 <StoreInfo id={store} map={false} />
               </li>
