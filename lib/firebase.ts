@@ -175,7 +175,7 @@ export const getReviewList = async (
   const sortBy = sort === "최신순" ? "date" : "rating";
 
   try {
-    if (pageParam === 0) {
+    if (pageParam == 0) {
       const qAll = query(
         collection(db, "stores", id, "review"),
         orderBy(sortBy, "desc"),
@@ -195,10 +195,10 @@ export const getReviewList = async (
       const lastDoc = snapShot.docs[perPage - 1];
       const nextPageParam = lastDoc ? lastDoc.data().reviewID : null;
       const hasNextPage = nextPageParam
-        ? reviewList.length === perPage + 1
+        ? reviewList.length == perPage + 1
         : false;
-      if (reviewList.length === perPage + 1) {
-        reviewList.splice(5, 1);
+      if (reviewList.length == perPage + 1) {
+        reviewList.splice(perPage);
       }
       const result: ReviewDocumentData = {
         reviewList: reviewList,
@@ -206,7 +206,9 @@ export const getReviewList = async (
         hasNextPage: hasNextPage,
       };
       return result;
-    } else if (pageParam !== 0) {
+    }
+
+    if (pageParam != 0) {
       const startAfterRef = doc(db, "stores", id, "review", String(pageParam));
       const startAfterSnap = await getDoc(startAfterRef);
 
@@ -234,11 +236,11 @@ export const getReviewList = async (
         const lastDoc = nextSnapShot.docs[perPage - 1];
         const nextPageParam = lastDoc ? lastDoc.data().reviewID : null;
         const hasNextPage = nextPageParam
-          ? reviewList.length === perPage + 1
+          ? reviewList.length == perPage + 1
           : false;
 
         if (reviewList.length === perPage + 1) {
-          reviewList.splice(5, 1);
+          reviewList.splice(perPage);
         }
         const result: ReviewDocumentData = {
           reviewList: reviewList,
@@ -286,33 +288,85 @@ export const getMostPopularStores = async () => {
 };
 
 export const findStore = async (
-  pageParam: number,
+  pageParam: number | string,
   searchInput: string | null
 ) => {
   if (!searchInput) return;
 
+  const perPage = 5;
   let searchForStation = searchInput;
   const lastWord = searchForStation[searchForStation.length - 1];
   if (lastWord !== "역") {
     searchForStation += "역";
   }
-  const q = query(
-    collection(db, "stores"),
-    or(
-      where("storeName", "==", searchInput),
-      where("stationList", "array-contains", searchForStation)
-    ),
-    orderBy("ttlParticipants", "desc")
-  );
   try {
-    const docSnap = await getDocs(q);
-    const storeList = docSnap.docs.map((doc) => doc.data().id);
-    const result: StoreSearchDocumentData = {
-      storeList: storeList,
-      nextPage: "test",
-      hasNextPage: true,
-    };
-    return result;
+    if (pageParam == 0) {
+      const q = query(
+        collection(db, "stores"),
+        or(
+          where("storeName", "==", searchInput),
+          where("stationList", "array-contains", searchForStation)
+        ),
+        orderBy("ttlParticipants", "desc"),
+        limit(perPage + 1)
+      );
+
+      const snapShot = await getDocs(q);
+      const storeList = snapShot.docs.map((doc) => doc.data().id);
+      const lastDoc = snapShot.docs[perPage - 1];
+      const nextPageParam = lastDoc ? lastDoc.data().id : null;
+      const hasNextPage = nextPageParam
+        ? storeList.length == perPage + 1
+        : false;
+
+      if (storeList.length == perPage + 1) {
+        storeList.splice(perPage);
+      }
+
+      const result: StoreSearchDocumentData = {
+        storeList,
+        nextPageParam,
+        hasNextPage,
+      };
+      return result;
+    }
+
+    if (pageParam != 0) {
+      const startAfterRef = doc(db, "stores", String(pageParam));
+      const startAfterSnap = await getDoc(startAfterRef);
+
+      if (startAfterSnap.exists()) {
+        const nextQ = query(
+          collection(db, "stores"),
+          or(
+            where("storeName", "==", searchInput),
+            where("stationList", "array-contains", searchForStation)
+          ),
+          orderBy("ttlParticipants", "desc"),
+          startAfter(startAfterSnap),
+          limit(perPage + 1)
+        );
+
+        const snapShot = await getDocs(nextQ);
+        const storeList = snapShot.docs.map((doc) => doc.data().id);
+        const lastDoc = snapShot.docs[perPage - 1];
+        const nextPageParam = lastDoc ? lastDoc.data().id : null;
+        const hasNextPage = nextPageParam
+          ? storeList.length == perPage + 1
+          : false;
+
+        if (storeList.length == perPage + 1) {
+          storeList.splice(perPage);
+        }
+
+        const result: StoreSearchDocumentData = {
+          storeList,
+          nextPageParam,
+          hasNextPage,
+        };
+        return result;
+      }
+    }
   } catch (error) {
     throw new Error(`findStore Error: Time(${new Date()}) ERROR ${error}`);
   }

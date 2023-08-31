@@ -24,6 +24,6 @@ export interface StoreDocumentData extends DocumentData {
 
 export interface StoreSearchDocumentData extends DocumentData {
   storeList: string[];
-  nextPage: string;
+  nextPageParam: string;
   hasNextPage: boolean;
 }
