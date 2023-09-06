@@ -9,6 +9,7 @@ import {
   auth,
   deleteImg,
   getImgUrl,
+  getReviewImageUrl,
   setDocReview,
   updateImg,
 } from "@/lib/firebase";
@@ -18,8 +19,10 @@ import { getStation } from "@/lib/kakaoAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
-import ImageUploader, { Imagefile } from "@/components/ImageUploader";
 import InformModal from "@/components/InformModal";
+import MultiImageUploader, {
+  MultiImagefile,
+} from "@/components/MultiImageUploader";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);
@@ -28,7 +31,7 @@ const ReviewForm = () => {
   const [existingReview, setExistingReview] = useState<RevisionOption | null>(
     null
   );
-  const [imgFile, setImgFile] = useState<Imagefile | null>(null);
+  const [imgFile, setImgFile] = useState<MultiImagefile | null>(null);
   const [modal, setModal] = useState(false);
   const [inform, setInform] = useState("리뷰가 등록되었습니다!");
   const [store, setStore] = useState({
@@ -124,18 +127,17 @@ const ReviewForm = () => {
       : `${id}_${Date.now()}`;
 
     const imgRef = `store/${store.id}/${reviewID}`;
+    let url = null;
 
     if (imgFile?.file) {
       const imageDoc = {
-        refPath: imgRef,
-        imageFile: imgFile.file,
+        path: imgRef,
+        imgFile: imgFile.file,
       };
-      await updateImg(imageDoc);
+      url = await getReviewImageUrl(imageDoc);
     } else if (!imgFile && existingReview?.img) {
       await deleteImg(imgRef);
     }
-
-    const url = imgFile ? await getImgUrl(imgRef) : null;
 
     const newDoc = {
       id: id,
@@ -296,11 +298,11 @@ const ReviewForm = () => {
           사진을 첨부해주세요.{" "}
           <span className="text-xs font-normal">(선택 항목)</span>
         </div>
-        <ImageUploader dispatch={setImgFile} img={imgFile} />
+        <MultiImageUploader dispatch={setImgFile} img={imgFile} />
         <button
           role="button"
           onClick={() => reset()}
-          className="text-sm font-semibold hover:bg-base-300 bg-base-200 px-4 py-2 mt-5 rounded-full mx-auto"
+          className="text-xs font-semibold hover:bg-base-300 bg-base-200 px-4 py-2 mt-5 rounded-full mx-auto"
         >
           다시 작성하기
         </button>

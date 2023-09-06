@@ -36,7 +36,7 @@ const Review = ({ id }: { id: string }) => {
   const [user] = useAuthState(auth);
   const [confirmModal, setConfirmModal] = useState(false);
   const [informModal, setInformModal] = useState(false);
-  const [imageModal, setImageModal] = useState<string | null | false>(false);
+  const [imageModal, setImageModal] = useState<string[] | null | false>(false);
   const [isLast, setIsLast] = useState(false);
   const [filter, setFilter] = useState(false);
   const [sort, setSort] = useState("최신순");
@@ -231,24 +231,29 @@ const Review = ({ id }: { id: string }) => {
                 </div>
               </div>
               <div className="flex flex-col justify-between text-left p-2 md:indent-3 bg-[#deeaea]/60 border border-base-200 text-secondary-content rounded-xl shadow my-1 min-h-[80px]">
-                {review.image !== null ? (
+                {review.image && (
                   <div
                     onClick={() => setImageModal(review.image)}
-                    className="relative w-28 h-28 flex items-center justify-center bg-[#fff] overflow-hidden rounded-lg mb-2 shadow cursor-pointer"
+                    className="flex"
                   >
-                    <Image
-                      src={review.image}
-                      alt="리뷰이미지"
-                      priority={idx === 0}
-                      fill
-                      sizes="112px"
-                      className="object-cover"
-                    />{" "}
+                    {review.image.map((imgItem, idx) => (
+                      <>
+                        <div className="relative w-24 h-24 flex items-center justify-center bg-white overflow-hidden rounded-lg mb-2 mr-1 shadow cursor-pointer">
+                          <Image
+                            key={idx}
+                            src={imgItem}
+                            alt="리뷰이미지"
+                            priority={idx === 0}
+                            fill
+                            sizes="112px"
+                            className="object-cover"
+                          />
+                        </div>
+                      </>
+                    ))}
                   </div>
-                ) : null}
-
+                )}
                 <p>{review.text}</p>
-
                 <div className="flex justify-end items-center italic rounded-xl bg-[#d3e5e5] px-2 shadow mt-1">
                   {review.isRevised ? (
                     <p className="mr-1 text-neutral-400 text-[10px]">
@@ -297,7 +302,7 @@ const Review = ({ id }: { id: string }) => {
       {informModal && (
         <InformModal loading={isLoading} inform={"삭제 되었습니다!"} />
       )}
-      {imageModal && <ImageModal src={imageModal} toggle={setImageModal} />}
+      {imageModal && <ImageModal imgList={imageModal} toggle={setImageModal} />}
     </div>
   );
 };

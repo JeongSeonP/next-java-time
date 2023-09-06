@@ -8,10 +8,6 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
-// import { DeleteOption, ReviewDocumentData } from "../components/Review";
-// import { FlavorCode, RichnessCode } from "../components/SelectOptions";
-// import { UserDocumentData } from "../pages/MyPage";
-// import { StoreDocumentData } from "../components/Table";
 import {
   doc,
   setDoc,
@@ -37,6 +33,7 @@ import {
   ReviewDocData,
   ReviewDocProp,
   ReviewDocumentData,
+  ReviewImageDoc,
   UpdateCommentProp,
 } from "@/interface/review";
 import { UserDocProp, UserDocumentData } from "@/interface/user";
@@ -372,29 +369,6 @@ export const findStore = async (
   }
 };
 
-export const findStoreA = async (searchInput: string) => {
-  let searchForStation = searchInput;
-  const lastWord = searchForStation[searchForStation.length - 1];
-  if (lastWord !== "역") {
-    searchForStation += "역";
-  }
-  const q = query(
-    collection(db, "stores"),
-    or(
-      where("storeName", "==", searchInput),
-      where("stationList", "array-contains", searchForStation)
-    ),
-    orderBy("ttlParticipants", "desc")
-  );
-  try {
-    const docSnap = await getDocs(q);
-    const storeList = docSnap.docs.map((doc) => doc.data().id);
-    return storeList;
-  } catch (error) {
-    throw new Error(`findStore Error: Time(${new Date()}) ERROR ${error}`);
-  }
-};
-
 export const setDocUser = async ({ uid, userDoc }: UserDocProp) => {
   if (!uid) return;
   const userRef = doc(db, "users", uid);
@@ -417,6 +391,39 @@ export const getDocUser = async (uid: string | undefined | null) => {
     }
   } catch (error) {
     throw new Error(`getDocUser Error: Time(${new Date()}) ERROR ${error}`);
+  }
+};
+
+export const getReviewImageUrl = async ({ path, imgFile }: ReviewImageDoc) => {
+  if (imgFile.length === 0) return null;
+  try {
+    const resizedList = await Promise.all(
+      imgFile.map(async (img) => {
+        const reSize = await imageCompression(img, { maxSizeMB: 0.5 });
+        return reSize;
+      })
+    );
+
+    if (!path) return;
+    const imgRef = ref(storage, path);
+
+    const uploadPromise = resizedList.map((blob, idx) => {
+      const childRef = ref(imgRef, `/${idx}`);
+      return uploadBytes(childRef, blob);
+    });
+
+    const urlList = await Promise.all(uploadPromise)
+      .then(() => {
+        return Promise.all(
+          imgFile.map((_, idx) => getDownloadURL(ref(imgRef, `/${idx}`)))
+        );
+      })
+      .then((downloadURLs) => downloadURLs);
+    return urlList;
+  } catch (error) {
+    throw new Error(
+      `getReviewImageUrl Error: Time(${new Date()}) ERROR ${error}`
+    );
   }
 };
 

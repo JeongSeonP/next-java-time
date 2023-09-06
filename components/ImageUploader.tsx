@@ -25,6 +25,7 @@ const ImageUploader = ({ dispatch, img }: Props) => {
         name: fileList[0].name,
       });
     }
+    e.target.value = "";
   };
 
   return (

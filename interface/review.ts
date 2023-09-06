@@ -21,7 +21,7 @@ export interface ReviewDoc {
   richness: string;
   text: string;
   rating: string;
-  image: string | null;
+  image: string[] | null | undefined;
   comments: CommentProp[] | null;
   isRevised: boolean;
 }
@@ -38,7 +38,7 @@ export interface ReviewDocData {
   richness: RichnessCode;
   text: string;
   rating: string;
-  image: string | null;
+  image: string[] | null;
   comments: CommentProp[] | null;
   isRevised: boolean;
 }
@@ -77,7 +77,7 @@ export interface RevisionOption {
   flavor: "sour" | "nutty";
   richness: "rich" | "bland" | "bitter";
   text: string;
-  img: string | null;
+  img: string[] | null;
 }
 
 export interface ReviewDocumentData extends DocumentData {
@@ -89,4 +89,9 @@ export interface ReviewDocumentData extends DocumentData {
 export interface ImageDoc {
   refPath: string;
   imageFile: File;
+}
+
+export interface ReviewImageDoc {
+  path: string;
+  imgFile: File[];
 }
