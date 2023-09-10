@@ -24,9 +24,10 @@ const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
   if (!storeDoc) {
     return <div className="my-5 text-sm">업체정보가 없습니다.</div>;
   }
-  const averageRate = (storeDoc.ttlRate / storeDoc.ttlParticipants)
-    .toFixed(1)
-    .toString();
+  const averageRate =
+    storeDoc.ttlParticipants == 0
+      ? "0"
+      : (storeDoc.ttlRate / storeDoc.ttlParticipants).toFixed(1).toString();
 
   return (
     <>

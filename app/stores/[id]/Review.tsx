@@ -237,19 +237,19 @@ const Review = ({ id }: { id: string }) => {
                     className="flex"
                   >
                     {review.image.map((imgItem, idx) => (
-                      <>
-                        <div className="relative w-24 h-24 flex items-center justify-center bg-white overflow-hidden rounded-lg mb-2 mr-1 shadow cursor-pointer">
-                          <Image
-                            key={idx}
-                            src={imgItem}
-                            alt="리뷰이미지"
-                            priority={idx === 0}
-                            fill
-                            sizes="112px"
-                            className="object-cover"
-                          />
-                        </div>
-                      </>
+                      <div
+                        key={idx}
+                        className="relative w-24 h-24 flex items-center justify-center bg-white overflow-hidden rounded-lg mb-2 mr-1 shadow cursor-pointer"
+                      >
+                        <Image
+                          src={imgItem}
+                          alt="리뷰이미지"
+                          priority={idx === 0}
+                          fill
+                          sizes="112px"
+                          className="object-cover"
+                        />
+                      </div>
                     ))}
                   </div>
                 )}
@@ -263,7 +263,6 @@ const Review = ({ id }: { id: string }) => {
                   <p>{getFormattedDate(review.date, new Date())}</p>
                 </div>
               </div>
-
               <ul>
                 {review.comments
                   ? review.comments.map((comment) => (
@@ -276,7 +275,6 @@ const Review = ({ id }: { id: string }) => {
                     ))
                   : null}
               </ul>
-
               <CommentInput
                 info={{ storeId: id, reviewId: review.reviewID }}
                 prevComment={null}

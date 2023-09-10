@@ -5,6 +5,7 @@ import {
   getDownloadURL,
   getStorage,
   list,
+  listAll,
   ref,
   uploadBytes,
 } from "firebase/storage";
@@ -269,7 +270,7 @@ export const getMostPopularStores = async () => {
   const q = query(
     collection(db, "stores"),
     orderBy("ttlParticipants", "desc"),
-    limit(6)
+    limit(15)
   );
   try {
     const docSnap = await getDocs(q);
@@ -440,9 +441,13 @@ export const updateImg = async ({ refPath, imageFile }: ImageDoc) => {
 };
 
 export const deleteImg = async (refPath: string) => {
-  const imageRef = ref(storage, refPath);
+  const listRef = ref(storage, refPath);
   try {
-    await deleteObject(imageRef);
+    const imgList = await listAll(listRef);
+    console.log(imgList);
+    if (imgList.prefixes.length == 0) return;
+    imgList.prefixes.forEach(async (item) => await deleteObject(item));
+    // await deleteObject(imageRef);
   } catch (error) {
     throw new Error(`deleteImg Error: Time(${new Date()}) ERROR ${error}`);
   }
@@ -462,9 +467,13 @@ export const getThumbnailUrl = async (refPath: string) => {
   const listRef = ref(storage, refPath);
   try {
     const imgList = await list(listRef, { maxResults: 1 });
-    if (imgList.items.length === 0) return;
-
-    const url = await getDownloadURL(imgList.items[0]);
+    if (imgList.prefixes.length == 0 && imgList.items.length == 0) return;
+    if (imgList.prefixes[0] == undefined) {
+      const url = await getDownloadURL(imgList.items[0]);
+      return url;
+    }
+    const test = await list(imgList.prefixes[0], { maxResults: 1 });
+    const url = await getDownloadURL(test.items[0]);
     return url;
   } catch (error) {
     throw new Error(

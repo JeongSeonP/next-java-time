@@ -14,9 +14,10 @@ const TableItem = ({ store, idx }: TableItemProps) => {
   const router = useRouter();
   const [storeImage, setStoreImage] = useState<string | null>(null);
 
-  const averageRate = (store.ttlRate / store.ttlParticipants)
-    .toFixed(1)
-    .toString();
+  const averageRate =
+    store.ttlParticipants == 0
+      ? "0"
+      : (store.ttlRate / store.ttlParticipants).toFixed(1).toString();
 
   useEffect(() => {
     const refPath = `store/${store.id}`;
