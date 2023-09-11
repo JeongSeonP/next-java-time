@@ -38,18 +38,41 @@ const MultiImageUploader = ({ dispatch, img }: Props) => {
 
     e.target.value = "";
   };
-
   const handleDeleteImg = (id: number) => {
+    if (!img?.file && img?.thumbnail) {
+      const filteredThumbnail = img?.thumbnail.map((item, index) =>
+        index == id ? (item = String(id)) : item
+      );
+
+      if (
+        img.thumbnail.length ==
+        filteredThumbnail.filter((item) => item.length == 1).length
+      ) {
+        dispatch(null);
+        return;
+      }
+
+      dispatch({
+        file: null,
+        thumbnail: filteredThumbnail,
+        name: "prevImg",
+      });
+      return;
+    }
+
     const filteredFile = img?.file?.filter((_, index) => index !== id);
     const filteredThumbnail = img?.thumbnail.filter((_, index) => index !== id);
 
-    if (filteredFile?.length == 0) {
+    if (filteredFile?.length == 0 && filteredThumbnail?.length == 0) {
       dispatch(null);
-    } else if (filteredFile && filteredThumbnail) {
+      return;
+    }
+
+    if (filteredFile && filteredThumbnail) {
       dispatch({
         file: filteredFile,
         thumbnail: filteredThumbnail,
-        name: "업로드할 이미지",
+        name: "uploadImg",
       });
     }
   };
@@ -67,30 +90,39 @@ const MultiImageUploader = ({ dispatch, img }: Props) => {
               className="text-primary-dark-color"
             />
 
-            <p>{img ? img.thumbnail.length : 0}/3</p>
+            <p>
+              {img
+                ? img.thumbnail.filter((item) => item.length != 1).length
+                : 0}
+              /3
+            </p>
           </label>
           <div className="grow flex">
-            {img?.thumbnail.map((item, id) => (
-              <div
-                key={id}
-                className="w-20 h-20 mr-1 flex justify-center items-center rounded-lg shadow bg-white overflow-hidden relative z-10"
-              >
-                <Image
-                  src={item}
-                  fill
-                  sizes="144px"
-                  alt={img.name}
-                  className="object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleDeleteImg(id)}
-                  className="w-5 h-5 border rounded-full text-primary flex justify-center items-center bg-white hover:bg-primary hover:text-base-100 absolute top-1 right-1"
+            {img?.thumbnail.map((item, id) =>
+              item.length == 1 ? (
+                ""
+              ) : (
+                <div
+                  key={id}
+                  className="w-20 h-20 mr-1 flex justify-center items-center rounded-lg shadow bg-white overflow-hidden relative z-10"
                 >
-                  <IoClose />
-                </button>
-              </div>
-            ))}
+                  <Image
+                    src={item}
+                    fill
+                    sizes="144px"
+                    alt={img.name}
+                    className="object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteImg(id)}
+                    className="w-5 h-5 border rounded-full text-primary flex justify-center items-center bg-white hover:bg-primary hover:text-base-100 absolute top-1 right-1"
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              )
+            )}
           </div>
         </div>
       </div>

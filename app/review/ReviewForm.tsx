@@ -8,10 +8,12 @@ import { flavorList, richnessList } from "@/constants/selectOptions";
 import {
   auth,
   deleteImg,
+  deleteReviewImage,
   getImgUrl,
+  getImgUrlList,
   getReviewImageUrl,
   setDocReview,
-  updateImg,
+  storage,
 } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { MdError } from "react-icons/Md";
@@ -23,6 +25,7 @@ import InformModal from "@/components/InformModal";
 import MultiImageUploader, {
   MultiImagefile,
 } from "@/components/MultiImageUploader";
+import { getDownloadURL, ref } from "firebase/storage";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);
@@ -135,8 +138,25 @@ const ReviewForm = () => {
         imgFile: imgFile.file,
       };
       url = await getReviewImageUrl(imageDoc);
+    } else if (!imgFile?.file && imgFile?.thumbnail) {
+      const prevImgList = imgFile.thumbnail.map(
+        (item, idx) => (item = String(idx))
+      );
+      const deletedPrevImgList = imgFile.thumbnail.filter(
+        (item) => item.length == 1
+      );
+      const isDeletedFromPrevImg = deletedPrevImgList.length > 0;
+
+      if (isDeletedFromPrevImg) {
+        deletedPrevImgList.forEach(async (item) => {
+          await deleteImg(`${imgRef}/${item}`);
+          console.log(`${imgRef}/${item}`);
+        });
+      }
+
+      url = await getImgUrlList(imgRef);
     } else if (!imgFile && existingReview?.img) {
-      await deleteImg(imgRef);
+      await deleteReviewImage(imgRef);
     }
 
     const newDoc = {

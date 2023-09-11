@@ -270,7 +270,7 @@ export const getMostPopularStores = async () => {
   const q = query(
     collection(db, "stores"),
     orderBy("ttlParticipants", "desc"),
-    limit(15)
+    limit(6)
   );
   try {
     const docSnap = await getDocs(q);
@@ -415,15 +415,43 @@ export const getReviewImageUrl = async ({ path, imgFile }: ReviewImageDoc) => {
 
     const urlList = await Promise.all(uploadPromise)
       .then(() => {
-        return Promise.all(
-          imgFile.map((_, idx) => getDownloadURL(ref(imgRef, `/${idx}`)))
-        );
+        const urls = getImgUrlList(path);
+        return urls;
       })
       .then((downloadURLs) => downloadURLs);
+
     return urlList;
   } catch (error) {
     throw new Error(
       `getReviewImageUrl Error: Time(${new Date()}) ERROR ${error}`
+    );
+  }
+};
+
+export const getImgUrlList = async (refPath: string) => {
+  const listRef = ref(storage, refPath);
+  try {
+    const imgList = await listAll(listRef);
+    if (imgList.items.length == 0) return;
+
+    const urlList = await Promise.all(
+      imgList.items.map((item) => getDownloadURL(item))
+    ).then((downloadURLs) => downloadURLs);
+    return urlList;
+  } catch (error) {
+    throw new Error(`getImgUrlList Error: Time(${new Date()}) ERROR ${error}`);
+  }
+};
+
+export const deleteReviewImage = async (refPath: string) => {
+  const listRef = ref(storage, refPath);
+  try {
+    const imgList = await listAll(listRef);
+    if (imgList.items.length == 0) return;
+    imgList.items.forEach(async (item) => await deleteObject(item));
+  } catch (error) {
+    throw new Error(
+      `deleteReviewImage Error: Time(${new Date()}) ERROR ${error}`
     );
   }
 };
@@ -441,13 +469,9 @@ export const updateImg = async ({ refPath, imageFile }: ImageDoc) => {
 };
 
 export const deleteImg = async (refPath: string) => {
-  const listRef = ref(storage, refPath);
+  const imgRef = ref(storage, refPath);
   try {
-    const imgList = await listAll(listRef);
-    console.log(imgList);
-    if (imgList.prefixes.length == 0) return;
-    imgList.prefixes.forEach(async (item) => await deleteObject(item));
-    // await deleteObject(imageRef);
+    await deleteObject(imgRef);
   } catch (error) {
     throw new Error(`deleteImg Error: Time(${new Date()}) ERROR ${error}`);
   }
