@@ -148,10 +148,9 @@ const ReviewForm = () => {
       const isDeletedFromPrevImg = deletedPrevImgList.length > 0;
 
       if (isDeletedFromPrevImg) {
-        deletedPrevImgList.forEach(async (item) => {
-          await deleteImg(`${imgRef}/${item}`);
-          console.log(`${imgRef}/${item}`);
-        });
+        await Promise.all(
+          deletedPrevImgList.map((item) => deleteImg(`${imgRef}/${item}`))
+        );
       }
 
       url = await getImgUrlList(imgRef);

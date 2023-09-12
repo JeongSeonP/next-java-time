@@ -57,7 +57,7 @@ const SearchResult = () => {
       <ul className=" flex flex-col items-center md:w-full max-w-xl w-[350px] rounded-2xl mt-2 p-2">
         {isFetching ? (
           <div className="animate-spin mt-4">
-            <CgSpinner className="ico-coffeeBean text-neutral-content text-4xl" />
+            <CgSpinner className="text-neutral-content text-4xl" />
           </div>
         ) : null}
         {noResult ? (

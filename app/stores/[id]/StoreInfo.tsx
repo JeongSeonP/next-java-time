@@ -6,10 +6,13 @@ import { getDocStore, getThumbnailUrl } from "@/lib/firebase";
 import StarRate from "@/components/StarRate";
 import KakaoMap from "./KakaoMap";
 import { useQuery } from "@tanstack/react-query";
+import { CgSpinner } from "react-icons/Cg";
 
 const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
   const [storeImage, setStoreImage] = useState<string | null>(null);
-  const { data: storeDoc } = useQuery(["storeInfo", id], () => getDocStore(id));
+  const { data: storeDoc, isLoading } = useQuery(["storeInfo", id], () =>
+    getDocStore(id)
+  );
   useEffect(() => {
     const refPath = `store/${storeDoc?.id}`;
     const getUrl = async () => {
@@ -21,13 +24,17 @@ const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
     getUrl();
   }, [storeDoc]);
 
-  if (!storeDoc) {
-    return <div className="my-5 text-sm">업체정보가 없습니다.</div>;
+  if (isLoading) {
+    <div className="animate-spin">
+      <CgSpinner className="text-neutral-content text-4xl" />
+    </div>;
   }
-  const averageRate =
-    storeDoc.ttlParticipants == 0
+
+  const averageRate = storeDoc
+    ? storeDoc?.ttlParticipants == 0
       ? "0"
-      : (storeDoc.ttlRate / storeDoc.ttlParticipants).toFixed(1).toString();
+      : (storeDoc.ttlRate / storeDoc.ttlParticipants).toFixed(1).toString()
+    : "0";
 
   return (
     <>
@@ -50,19 +57,19 @@ const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
 
           <div className="flex flex-col justify-between w-[170px] md:w-[400px] ml-1 md:ml-4">
             <p className=" text-sm text-left mb-1 font-semibold">
-              {storeDoc.storeName}
+              {storeDoc?.storeName}
             </p>
             <p className=" text-sm text-left mb-1 font-semibold">
-              {storeDoc.address}
+              {storeDoc?.address}
             </p>
             <div className=" md:text-sm text-xs text-left">
-              {storeDoc.phone === "" ? null : (
+              {storeDoc?.phone === "" ? null : (
                 <>
                   <BsTelephoneFill
                     className="inline-block mr-1 -mt-0.5"
                     size="11"
                   />
-                  <p className="inline-block">{storeDoc.phone}</p>
+                  <p className="inline-block">{storeDoc?.phone}</p>
                 </>
               )}
             </div>
@@ -72,7 +79,7 @@ const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
               </span>
               <StarRate rate={averageRate} />
               <span className="inline-block mt-0.5">
-                ({storeDoc.ttlParticipants})
+                ({storeDoc?.ttlParticipants})
               </span>
             </div>
           </div>

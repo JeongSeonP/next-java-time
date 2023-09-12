@@ -12,7 +12,7 @@ const InformModal = ({ loading, inform }: InformModalProps) => {
         <div className="flex items-center justify-center card-body bg-[#f2e8f7] text-xs sm:text-sm h-36 font-semibold text-center ">
           {loading ? (
             <div className="animate-spin">
-              <CgSpinner className="ico-coffeeBean text-neutral-content text-4xl" />
+              <CgSpinner className="text-neutral-content text-4xl" />
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center">
