@@ -1,4 +1,4 @@
-import { CgSpinner } from "react-icons/Cg";
+import { CgSpinner } from "react-icons/cg";
 
 const Loading = () => {
   return (

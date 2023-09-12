@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthState, useSignOut } from "react-firebase-hooks/auth";
-import { BsFillPersonFill } from "react-icons/Bs";
+import { BsFillPersonFill } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";

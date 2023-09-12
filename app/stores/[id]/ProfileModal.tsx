@@ -4,7 +4,7 @@ import { getDocUser } from "@/lib/firebase";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
-import { BsCheckCircleFill, BsFillPersonFill } from "react-icons/Bs";
+import { BsCheckCircleFill, BsFillPersonFill } from "react-icons/bs";
 
 interface UserData {
   email: string;

@@ -2,7 +2,7 @@
 
 import { Dispatch, SetStateAction } from "react";
 import { BiSearch } from "react-icons/bi";
-import { IoIosClose } from "react-icons/Io";
+import { IoIosClose } from "react-icons/io";
 
 interface props {
   value: string;

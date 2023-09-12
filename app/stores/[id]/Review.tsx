@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
-import { BsCheck, BsPencil, BsTrash } from "react-icons/Bs";
+import { BsCheck, BsPencil, BsTrash } from "react-icons/bs";
 import ConfirmModal from "./ConfirmModal";
 import CommentInput from "./CommentInput";
 import Comments from "./Comments";

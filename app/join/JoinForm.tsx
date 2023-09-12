@@ -11,8 +11,8 @@ import {
   useUpdateProfile,
 } from "react-firebase-hooks/auth";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
-import { MdError } from "react-icons/Md";
-import { IoIosClose } from "react-icons/Io";
+import { MdError } from "react-icons/md";
+import { IoIosClose } from "react-icons/io";
 import InformModal from "@/components/InformModal";
 
 const JoinForm = () => {

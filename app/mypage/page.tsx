@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
-import { BsCheckCircleFill, BsFillPersonFill } from "react-icons/Bs";
+import { BsCheckCircleFill, BsFillPersonFill } from "react-icons/bs";
 import { favoriteFlavor, favoriteType } from "@/constants/selectOptions";
 
 const MyPage = () => {

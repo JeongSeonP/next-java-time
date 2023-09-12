@@ -1,4 +1,4 @@
-import { BsStarFill } from "react-icons/Bs";
+import { BsStarFill } from "react-icons/bs";
 
 interface Props {
   rate: string;

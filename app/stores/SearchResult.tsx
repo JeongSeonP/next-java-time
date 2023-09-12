@@ -5,9 +5,9 @@ import { findStore } from "@/lib/firebase";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { CgSpinner } from "react-icons/Cg";
+import { CgSpinner } from "react-icons/cg";
 import StoreInfo from "./[id]/StoreInfo";
-import { BsChatDots } from "react-icons/Bs";
+import { BsChatDots } from "react-icons/bs";
 
 const SearchResult = () => {
   const searchParams = useSearchParams();

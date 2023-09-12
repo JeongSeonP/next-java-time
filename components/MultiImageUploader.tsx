@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
-import { MdAddPhotoAlternate } from "react-icons/Md";
+import { MdAddPhotoAlternate } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import InformModal from "./InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";

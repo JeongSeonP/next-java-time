@@ -16,7 +16,7 @@ import {
   storage,
 } from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { MdError } from "react-icons/Md";
+import { MdError } from "react-icons/md";
 import { getStation } from "@/lib/kakaoAPI";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";

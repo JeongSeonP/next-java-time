@@ -1,6 +1,6 @@
 import InputDispatch from "@/components/InputDispatch";
 import Link from "next/link";
-import { BsChatHeartFill } from "react-icons/Bs";
+import { BsChatHeartFill } from "react-icons/bs";
 import getQueryClient from "./utils/getQueryClient";
 import { dehydrate } from "@tanstack/react-query";
 import { getMostPopularStores } from "@/lib/firebase";

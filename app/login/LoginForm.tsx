@@ -11,11 +11,11 @@ import {
   useSignInWithGithub,
   useSignInWithGoogle,
 } from "react-firebase-hooks/auth";
-import { IoIosClose } from "react-icons/Io";
-import { FcGoogle } from "react-icons/Fc";
-import { MdError } from "react-icons/Md";
-import { CgSpinner } from "react-icons/Cg";
-import { VscGithub } from "react-icons/Vsc";
+import { IoIosClose } from "react-icons/io";
+import { FcGoogle } from "react-icons/fc";
+import { MdError } from "react-icons/md";
+import { CgSpinner } from "react-icons/cg";
+import { VscGithub } from "react-icons/vsc";
 
 const LoginForm = () => {
   const loginSchema = Yup.object({

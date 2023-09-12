@@ -1,5 +1,5 @@
-import { BsFillCheckCircleFill } from "react-icons/Bs";
-import { CgSpinner } from "react-icons/Cg";
+import { BsFillCheckCircleFill } from "react-icons/bs";
+import { CgSpinner } from "react-icons/cg";
 
 interface InformModalProps {
   loading: boolean;
