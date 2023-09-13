@@ -8,7 +8,6 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { DocumentData } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -23,6 +22,8 @@ import InformModal from "@/components/InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import ImageModal from "./ImageModal";
 import getFormattedDate from "@/app/utils/getFormattedDate";
+import { BiSolidPencil } from "react-icons/bi";
+import ShareButton from "./ShareButton";
 
 export interface DeleteOption {
   storeId: string;
@@ -141,12 +142,16 @@ const Review = ({ id }: { id: string }) => {
 
   return (
     <div className="md:w-full max-w-xl w-[350px] ">
-      <button
-        onClick={goToReview}
-        className="btn btn-neutral text-sub-color md:w-full max-w-xl w-[350px] mb-1"
-      >
-        리뷰 쓰기
-      </button>
+      <div className="flex justify-between my-2 gap-2">
+        <ShareButton />
+        <button
+          onClick={goToReview}
+          className="btn btn-neutral text-sub-color grow"
+        >
+          <BiSolidPencil size={18} className="-mr-1" />
+          리뷰 쓰기
+        </button>
+      </div>
       <div className="flex justify-between items-center px-2">
         <div className="flex items-center">
           {sortList.map((sortItem) => (
