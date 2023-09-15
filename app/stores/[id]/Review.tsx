@@ -143,7 +143,7 @@ const Review = ({ id }: { id: string }) => {
   return (
     <div className="md:w-full max-w-xl w-[350px] ">
       <div className="flex justify-between my-2 gap-2">
-        <ShareButton />
+        <ShareButton storeName={storeDoc?.storeName} />
         <button
           onClick={goToReview}
           className="btn btn-neutral text-sub-color grow"

@@ -1,34 +1,48 @@
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { IoIosShareAlt } from "react-icons/io";
+import ShareModal from "./ShareModal";
 
-const ShareButton = () => {
+const ShareButton = ({ storeName }: { storeName: string | undefined }) => {
+  const [shareModal, setShareModal] = useState(false);
   const pathname = usePathname();
   const baseUrl = "https://next-java-time.vercel.app";
   const shareData = {
     title: "Java Time",
-    text: "커피에 진심이신가요? Java Time에서 커피리뷰를 공유해보세요!",
+    text: `Java Time | ${storeName} - 리뷰페이지`,
     url: `${baseUrl}${pathname}`,
   };
-  console.log(shareData);
+
   const handleShare = async () => {
-    if (navigator.canShare(shareData)) {
-      console.log("canShare");
-      try {
-        await navigator.share(shareData);
-        console.log("Share");
-      } catch (error) {
-        throw new Error(
-          `handleShare Error: Time(${new Date()}) ERROR ${error}`
-        );
-      }
-    } else if (navigator.clipboard) {
-      navigator.clipboard.writeText(shareData.url);
-    }
+    // const isWebShareAPISupported = !navigator.canShare ? false : true;
+
+    // if (isWebShareAPISupported && navigator.canShare(shareData)) {
+    //   try {
+    //     await navigator.share(shareData);
+    //   } catch (error) {
+    //     throw new Error(
+    //       `handleShare Error: Time(${new Date()}) ERROR ${error}`
+    //     );
+    //   }
+    // } else if (navigator.clipboard) {
+    //   // navigator.clipboard.writeText(shareData.url);
+    //   setShareModal(true);
+    // }
+
+    setShareModal(true);
   };
   return (
-    <button onClick={handleShare} className="btn btn-outline bg-white w-1/4 ">
-      <IoIosShareAlt size={18} className="-mr-1" /> 공유
-    </button>
+    <div className="w-1/4 ">
+      <button
+        onClick={handleShare}
+        className="btn btn-outline bg-white w-full "
+      >
+        <IoIosShareAlt size={18} className="-mr-1" /> 공유
+      </button>
+      {shareModal ? (
+        <ShareModal data={shareData} toggle={setShareModal} />
+      ) : null}
+    </div>
   );
 };
 
