@@ -13,28 +13,23 @@ const ShareButton = ({ storeName }: { storeName: string | undefined }) => {
     url: `${baseUrl}${pathname}`,
   };
 
-  const handleShare = async () => {
-    // const isWebShareAPISupported = !navigator.canShare ? false : true;
-
-    // if (isWebShareAPISupported && navigator.canShare(shareData)) {
-    //   try {
-    //     await navigator.share(shareData);
-    //   } catch (error) {
-    //     throw new Error(
-    //       `handleShare Error: Time(${new Date()}) ERROR ${error}`
-    //     );
-    //   }
-    // } else if (navigator.clipboard) {
-    //   // navigator.clipboard.writeText(shareData.url);
-    //   setShareModal(true);
-    // }
-
-    setShareModal(true);
+  const handleShareButton = async () => {
+    if (navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+      } catch (error) {
+        throw new Error(
+          `handleShare Error: Time(${new Date()}) ERROR ${error}`
+        );
+      }
+    } else {
+      setShareModal(true);
+    }
   };
   return (
     <div className="w-1/4 ">
       <button
-        onClick={handleShare}
+        onClick={handleShareButton}
         className="btn btn-outline bg-white w-full "
       >
         <IoIosShareAlt size={18} className="-mr-1" /> 공유
