@@ -24,6 +24,8 @@ import ImageModal from "./ImageModal";
 import getFormattedDate from "@/app/utils/getFormattedDate";
 import { BiSolidPencil } from "react-icons/bi";
 import ShareButton from "./ShareButton";
+import { useInView } from "react-intersection-observer";
+import { CgSpinner } from "react-icons/cg";
 
 export interface DeleteOption {
   storeId: string;
@@ -43,9 +45,11 @@ const Review = ({ id }: { id: string }) => {
   const [sort, setSort] = useState("최신순");
   const [deleteOption, setDeleteOption] = useState<DeleteOption | null>(null);
   const sortList = ["최신순", "평점순"];
+  const [observeTarget, inView] = useInView({ threshold: 1.0 });
   const { data: storeDoc } = useQuery(["storeInfo", id], () => getDocStore(id));
   const {
     data: reviewDoc,
+    isFetchingNextPage,
     fetchNextPage,
     refetch,
   } = useInfiniteQuery<ReviewDocumentData | undefined>(
@@ -54,7 +58,7 @@ const Review = ({ id }: { id: string }) => {
     {
       getNextPageParam: (lastPage) => {
         if (lastPage) {
-          if (lastPage.reviewList.length < 5) return null;
+          if (isLast) return null;
           return lastPage.nextPageParam;
         }
       },
@@ -70,6 +74,12 @@ const Review = ({ id }: { id: string }) => {
   useEffect(() => {
     refetch();
   }, [filter, sort, refetch]);
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
 
   useEffect(() => {
     if (reviewDoc?.pages && reviewDoc.pages?.length > 0) {
@@ -90,10 +100,6 @@ const Review = ({ id }: { id: string }) => {
       }, SHOW_MODAL_DELAY);
     },
   });
-
-  const handlePage = () => {
-    fetchNextPage();
-  };
 
   const goToReview = () => {
     if (storeDoc) {
@@ -289,14 +295,14 @@ const Review = ({ id }: { id: string }) => {
           ))
         )}
       </ul>
-      {!isLast ? (
-        <button
-          onClick={handlePage}
-          className="btn btn-ghost w-3/4 sm:w-1/2 bg-base-200 hover:bg-base-300"
-        >
-          더보기
-        </button>
-      ) : null}
+      <div
+        ref={observeTarget}
+        className=" h-14 flex justify-center items-center"
+      >
+        {isFetchingNextPage ? (
+          <CgSpinner className="animate-spin text-neutral-content text-4xl w-fit" />
+        ) : null}
+      </div>
       <ConfirmModal
         toggle={confirmModal}
         handleRedirect={confirmDelete}
