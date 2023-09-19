@@ -1,4 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import SearchInput from "../../components/SearchInput";
 import SearchedStores from "./SearchedStores";
 import { getSearchedStoreInfo } from "@/lib/kakaoAPI";
@@ -28,21 +34,24 @@ interface StoreSearchProps {
 const StoreSearch = ({ dispatch }: StoreSearchProps) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchedList, setSearchedLIst] = useState<StoreProps[]>([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [lastPage, setLastPage] = useState(true);
   const [noResult, setNoResult] = useState(false);
   const [resultModal, setResultModal] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchInput == "") return;
     setResultModal(true);
     setSearchedLIst([]);
-    setPage(1);
+    setPage(page);
+    getPage(page);
   };
 
-  const handlePage = async () => {
-    setPage((page) => page + 1);
+  const handlePage = () => {
+    const curPage = page + 1;
+    setPage(curPage);
+    getPage(curPage);
   };
 
   const getSelectedStore = (selectedID: string) => {
@@ -64,13 +73,12 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
     }
   };
 
-  const getPage = async () => {
-    if (searchInput === "" || page === 0) return;
+  const getPage = async (page: number) => {
+    if (searchInput === "") return;
     const [storeInfos, isEnd] = await getSearchedStoreInfo(searchInput, page);
     if (storeInfos.length === 0) {
       setNoResult(true);
       setLastPage(true);
-      setPage(0);
       setSearchedLIst([]);
       return;
     } else {
@@ -91,15 +99,11 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
 
   useEffect(() => {
     if (searchInput === "") {
-      setPage(0);
+      setPage(1);
       setNoResult(false);
       setResultModal(false);
     }
   }, [searchInput]);
-
-  useEffect(() => {
-    getPage();
-  }, [page]);
 
   return (
     <>
