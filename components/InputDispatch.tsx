@@ -17,7 +17,7 @@ const InputDispatch = () => {
     <div className="relative ">
       <form
         onSubmit={handleSubmit}
-        className="input-group flex justify-center border border-base-300 relative w-full rounded-full shadow-sm"
+        className="input-group flex justify-center border border-sub-color relative w-full rounded-full shadow"
       >
         <SearchInput
           value={searchInput}

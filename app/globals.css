@@ -35,8 +35,14 @@ i {
 
 main {
   min-height: calc(100vh - 96px - 216px);
-  margin-top: 96px;
+  margin-top: 56px;
   color: #52453a;
+}
+
+@media (min-width: 640px) {
+  main {
+    margin-top: 96px;
+  }
 }
 
 .modal:not(dialog:not(.modal-open)) {

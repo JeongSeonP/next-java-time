@@ -295,7 +295,7 @@ const ReviewForm = () => {
             spellCheck={false}
             maxLength={150}
             required
-            className="textarea textarea-bordered placeholder:text-xs bg-white textarea-xs w-full mt-1"
+            className="textarea textarea-bordered textarea-md placeholder:text-xs bg-white w-full mt-1"
             {...register("text", {
               required: true,
               minLength: {

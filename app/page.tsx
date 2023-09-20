@@ -24,7 +24,7 @@ const HomePage = async () => {
               </span>
             </p>
           </div>
-          <div className="w-[350px]">
+          <div className="w-[350px] md:w-3/5">
             <InputDispatch />
           </div>
         </section>

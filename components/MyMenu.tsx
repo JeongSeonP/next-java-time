@@ -25,8 +25,8 @@ const MyMenu = () => {
   };
 
   return (
-    <div className="md:w-16 ">
-      <div tabIndex={0} className=" dropdown dropdown-end ">
+    <div className="md:w-16">
+      <div tabIndex={0} className=" dropdown dropdown-end sm:dropdown-bottom ">
         <label
           className={`btn btn-ghost btn-circle avatar
           ${
@@ -51,7 +51,7 @@ const MyMenu = () => {
         <ul
           onClick={handleFocus}
           tabIndex={0}
-          className="mt-3 px-1 py-2.5 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-28"
+          className="mt-2 sm:mt-3 px-1 py-2.5 z-[99999] shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-28"
         >
           {isLogin ? (
             <>
