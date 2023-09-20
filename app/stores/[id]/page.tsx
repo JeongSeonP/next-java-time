@@ -18,7 +18,7 @@ const StorePage = async ({ params: { id } }: { params: { id: string } }) => {
   const dehydratedState = dehydrate(queryClient);
 
   return (
-    <main className="pt-10 pb-20">
+    <main className="pt-7 pb-20">
       <div className=" w-4/5 mx-auto text-center flex flex-col justify-center items-center">
         <HydratedComponent state={dehydratedState}>
           <StoreArticle id={id} />

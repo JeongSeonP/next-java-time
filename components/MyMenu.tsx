@@ -26,7 +26,7 @@ const MyMenu = () => {
 
   return (
     <div className="md:w-16">
-      <div tabIndex={0} className=" dropdown dropdown-end sm:dropdown-bottom ">
+      <div tabIndex={0} className=" dropdown dropdown-end ">
         <label
           className={`btn btn-ghost btn-circle avatar
           ${
