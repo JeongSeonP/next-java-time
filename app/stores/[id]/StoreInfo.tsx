@@ -2,11 +2,11 @@ import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { BsTelephoneFill } from "react-icons/bs";
 import Image from "next/image";
-import { getDocStore, getThumbnailUrl } from "@/lib/firebase";
 import StarRate from "@/components/StarRate";
 import KakaoMap from "./KakaoMap";
 import { useQuery } from "@tanstack/react-query";
 import { CgSpinner } from "react-icons/cg";
+import { getDocStore, getThumbnailUrl } from "@/lib/firebase/store";
 
 const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
   const [storeImage, setStoreImage] = useState<string | null>(null);

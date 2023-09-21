@@ -1,10 +1,10 @@
 "use client";
 
-import { getDocStore } from "@/lib/firebase";
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import StoreInfo from "./StoreInfo";
 import Review from "./Review";
+import { getDocStore } from "@/lib/firebase/store";
 
 const StoreArticle = ({ id }: { id: string }) => {
   const { data: storeDoc } = useQuery(["storeInfo", id], () => getDocStore(id));

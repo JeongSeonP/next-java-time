@@ -5,16 +5,6 @@ import { useForm } from "react-hook-form";
 import { ReviewForm, RevisionOption } from "@/interface/review";
 import { useEffect, useState } from "react";
 import { flavorList, richnessList } from "@/constants/selectOptions";
-import {
-  auth,
-  deleteImg,
-  deleteReviewImage,
-  getImgUrl,
-  getImgUrlList,
-  getReviewImageUrl,
-  setDocReview,
-  storage,
-} from "@/lib/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { MdError } from "react-icons/md";
 import { getStation } from "@/lib/kakaoAPI";
@@ -25,7 +15,14 @@ import InformModal from "@/components/InformModal";
 import MultiImageUploader, {
   MultiImagefile,
 } from "@/components/MultiImageUploader";
-import { getDownloadURL, ref } from "firebase/storage";
+import { auth } from "@/lib/firebase/firebaseInit";
+import {
+  deleteReviewImage,
+  getImgUrlList,
+  getReviewImageUrl,
+  setDocReview,
+} from "@/lib/firebase/review";
+import { deleteImg } from "@/lib/firebase/user";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);

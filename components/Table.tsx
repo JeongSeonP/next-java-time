@@ -1,8 +1,8 @@
 "use client";
 
+import { getMostPopularStores } from "@/lib/firebase/store";
 import TableItem from "./TableItem";
 import { useQuery } from "@tanstack/react-query";
-import { getMostPopularStores } from "@/lib/firebase";
 
 const Table = () => {
   const { data: storeDoc } = useQuery(["storeInfo"], getMostPopularStores);

@@ -3,9 +3,9 @@ import Link from "next/link";
 import { BsChatHeartFill } from "react-icons/bs";
 import getQueryClient from "./utils/getQueryClient";
 import { dehydrate } from "@tanstack/react-query";
-import { getMostPopularStores } from "@/lib/firebase";
 import HydratedComponent from "@/app/utils/HydratedComponent";
 import Table from "@/components/Table";
+import { getMostPopularStores } from "@/lib/firebase/store";
 
 const HomePage = async () => {
   const queryClient = getQueryClient();

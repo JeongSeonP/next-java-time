@@ -1,7 +1,6 @@
 import StarRate from "@/components/StarRate";
 import { flavorList, richnessList } from "@/constants/selectOptions";
 import { ReviewDocData, ReviewDocumentData } from "@/interface/review";
-import { auth, deleteReview, getDocStore, getReviewList } from "@/lib/firebase";
 import {
   useInfiniteQuery,
   useMutation,
@@ -26,6 +25,9 @@ import { BiSolidPencil } from "react-icons/bi";
 import ShareButton from "./ShareButton";
 import { useInView } from "react-intersection-observer";
 import { CgSpinner } from "react-icons/cg";
+import { auth } from "@/lib/firebase/firebaseInit";
+import { getDocStore } from "@/lib/firebase/store";
+import { deleteReview, getReviewList } from "@/lib/firebase/review";
 
 export interface DeleteOption {
   storeId: string;
@@ -192,7 +194,7 @@ const Review = ({ id }: { id: string }) => {
       </div>
       <ul className=" text-xs md:text-sm">
         {reviewDoc?.pages.map((page) =>
-          page?.reviewList.map((review: ReviewDocData, idx) => (
+          page?.reviewList.map((review: ReviewDocData) => (
             <li
               key={review.reviewID}
               className="w-full text-right border-2 border-base-200 rounded-xl bg-[#fff] my-1 p-3"

@@ -1,11 +1,12 @@
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useState } from "react";
 import { CommentProp, UpdateCommentProp } from "@/interface/review";
-import { auth, updateComment } from "@/lib/firebase";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CommentInput from "./CommentInput";
 import Dropdown from "./Dropdown";
 import getFormattedDate from "@/app/utils/getFormattedDate";
+import { auth } from "@/lib/firebase/firebaseInit";
+import { updateComment } from "@/lib/firebase/review";
 
 interface Prop {
   storeId: string;

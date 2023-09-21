@@ -1,6 +1,6 @@
 import { favoriteFlavor, favoriteType } from "@/constants/selectOptions";
 import { UserDocumentData } from "@/interface/user";
-import { getDocUser } from "@/lib/firebase";
+import { getDocUser } from "@/lib/firebase/user";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";

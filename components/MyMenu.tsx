@@ -5,7 +5,7 @@ import { BsFillPersonFill } from "react-icons/bs";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/lib/firebase/firebaseInit";
 
 const MyMenu = () => {
   const [isLogin] = useAuthState(auth);

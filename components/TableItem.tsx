@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { getThumbnailUrl } from "@/lib/firebase";
 import { StoreDocumentData } from "@/interface/store";
 import StarRate from "./StarRate";
+import Link from "next/link";
+import { getThumbnailUrl } from "@/lib/firebase/store";
 
 interface TableItemProps {
   store: StoreDocumentData;
@@ -59,12 +60,12 @@ const TableItem = ({ store, idx }: TableItemProps) => {
           <span className="inline-block mt-0.5">({store.ttlParticipants})</span>
         </div>
         <div className="card-actions justify-end">
-          <button
-            onClick={() => router.push(`/stores/${store.id}`)}
+          <Link
+            href={`/stores/${store.id}`}
             className="btn btn-ghost btn-sm text-xs bg-base-200 hover:bg-base-300"
           >
             더보러가기
-          </button>
+          </Link>
         </div>
       </div>
     </div>

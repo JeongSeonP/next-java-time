@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/firebase";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,6 +13,7 @@ import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import { MdError } from "react-icons/md";
 import { IoIosClose } from "react-icons/io";
 import InformModal from "@/components/InformModal";
+import { auth } from "@/lib/firebase/firebaseInit";
 
 const JoinForm = () => {
   const joinSchema = Yup.object({

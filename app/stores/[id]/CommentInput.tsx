@@ -2,8 +2,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { auth, updateComment } from "@/lib/firebase";
 import { CommentProp, UpdateCommentProp } from "@/interface/review";
+import { auth } from "@/lib/firebase/firebaseInit";
+import { updateComment } from "@/lib/firebase/review";
 
 interface CommentInputProps {
   prevComment: {

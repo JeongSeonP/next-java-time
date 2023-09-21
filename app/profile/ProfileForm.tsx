@@ -4,14 +4,14 @@ import ImageUploader, { Imagefile } from "@/components/ImageUploader";
 import InformModal from "@/components/InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import { favoriteFlavor, favoriteType } from "@/constants/selectOptions";
+import { auth } from "@/lib/firebase/firebaseInit";
 import {
-  auth,
   deleteImg,
   getDocUser,
   getImgUrl,
   setDocUser,
   updateImg,
-} from "@/lib/firebase";
+} from "@/lib/firebase/user";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";

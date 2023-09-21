@@ -20,6 +20,7 @@ const StorePageSearch = () => {
     <>
       <div className="relative w-11/12 max-w-lg">
         <form
+          role="search"
           onSubmit={handleSubmit}
           className="input-group flex justify-center border border-base-300 relative w-full rounded-full shadow-sm"
         >

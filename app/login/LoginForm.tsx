@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { auth } from "@/lib/firebase";
 import {
   useSignInWithEmailAndPassword,
   useSignInWithGithub,
@@ -16,6 +15,7 @@ import { FcGoogle } from "react-icons/fc";
 import { MdError } from "react-icons/md";
 import { CgSpinner } from "react-icons/cg";
 import { VscGithub } from "react-icons/vsc";
+import { auth } from "@/lib/firebase/firebaseInit";
 
 const LoginForm = () => {
   const loginSchema = Yup.object({

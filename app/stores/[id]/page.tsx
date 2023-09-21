@@ -1,9 +1,10 @@
 import HydratedComponent from "@/app/utils/HydratedComponent";
 import getQueryClient from "@/app/utils/getQueryClient";
-import { getDocStore, getReviewList } from "@/lib/firebase";
 import { dehydrate } from "@tanstack/react-query";
 import React from "react";
 import StoreArticle from "./StoreArticle";
+import { getDocStore } from "@/lib/firebase/store";
+import { getReviewList } from "@/lib/firebase/review";
 
 const StorePage = async ({ params: { id } }: { params: { id: string } }) => {
   const queryClient = getQueryClient();

@@ -1,10 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import SearchInput from "../../components/SearchInput";
 import SearchedStores from "./SearchedStores";
 import { getSearchedStoreInfo } from "@/lib/kakaoAPI";
@@ -110,6 +104,7 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
       <div className="flex justify-center items-center  w-full ">
         <div className=" w-full max-w-lg">
           <form
+            role="search"
             onSubmit={handleSubmit}
             className="relative z-[9998] input-group flex justify-center border border-base-300 w-full rounded-full shadow-sm"
           >

@@ -1,11 +1,12 @@
 "use client";
-import { auth, getDocUser } from "@/lib/firebase";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
 import { BsCheckCircleFill, BsFillPersonFill } from "react-icons/bs";
 import { favoriteFlavor, favoriteType } from "@/constants/selectOptions";
+import { auth } from "@/lib/firebase/firebaseInit";
+import { getDocUser } from "@/lib/firebase/user";
 
 const MyPage = () => {
   const [user] = useAuthState(auth);
