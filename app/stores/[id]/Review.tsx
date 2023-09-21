@@ -12,14 +12,11 @@ import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Image from "next/image";
 import { BsCheck, BsPencil, BsTrash } from "react-icons/bs";
-import ConfirmModal from "./ConfirmModal";
 import CommentInput from "./CommentInput";
 import Comments from "./Comments";
 import Dropdown from "./Dropdown";
-import ProfileModal from "./ProfileModal";
 import InformModal from "@/components/InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
-import ImageModal from "./ImageModal";
 import getFormattedDate from "@/app/utils/getFormattedDate";
 import { BiSolidPencil } from "react-icons/bi";
 import ShareButton from "./ShareButton";
@@ -28,6 +25,12 @@ import { CgSpinner } from "react-icons/cg";
 import { auth } from "@/lib/firebase/firebaseInit";
 import { getDocStore } from "@/lib/firebase/store";
 import { deleteReview, getReviewList } from "@/lib/firebase/review";
+import { UserData } from "@/interface/user";
+import ConfirmModal from "./ConfirmModal";
+import ImageModal from "./ImageModal";
+import dynamic from "next/dynamic";
+
+const ProfileModal = dynamic(() => import("./ProfileModal"));
 
 export interface DeleteOption {
   storeId: string;
@@ -39,6 +42,7 @@ const Review = ({ id }: { id: string }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [user] = useAuthState(auth);
+  const [userModal, setUserModal] = useState<UserData | null>(null);
   const [confirmModal, setConfirmModal] = useState(false);
   const [informModal, setInformModal] = useState(false);
   const [imageModal, setImageModal] = useState<string[] | null | false>(false);
@@ -200,8 +204,12 @@ const Review = ({ id }: { id: string }) => {
               className="w-full text-right border-2 border-base-200 rounded-xl bg-[#fff] my-1 p-3"
             >
               <div className="flex justify-between items-center mb-1.5">
-                <ProfileModal user={review.user} />
-
+                <div
+                  onClick={() => setUserModal(review.user)}
+                  className="text-[#744959] font-semibold  hover:bg-base-200 cursor-pointer rounded-full py-1 px-3"
+                >
+                  {review.user.displayName ?? review.user.email}
+                </div>
                 <div className="flex justify-end items-center">
                   <span className="flex items-center my-1 font-semibold text-sm text-secondary-content">
                     {review.rating}
@@ -269,7 +277,7 @@ const Review = ({ id }: { id: string }) => {
                 <p>{review.text}</p>
                 <div className="flex justify-end items-center italic rounded-xl bg-[#d3e5e5] px-2 shadow mt-1">
                   {review.isRevised ? (
-                    <p className="mr-1 text-neutral-400 text-[10px]">
+                    <p className="mr-1 text-neutral-500 text-[10px]">
                       (편집됨)
                     </p>
                   ) : null}
@@ -305,6 +313,7 @@ const Review = ({ id }: { id: string }) => {
           <CgSpinner className="animate-spin text-neutral-content text-4xl w-fit" />
         ) : null}
       </div>
+      {userModal && <ProfileModal user={userModal} toggle={setUserModal} />}
       <ConfirmModal
         toggle={confirmModal}
         handleRedirect={confirmDelete}

@@ -15,7 +15,7 @@ const HomePage = async () => {
     <main className="py-5 pb-20">
       <div className="w-4/5 mx-auto text-center">
         <section className="form-control py-1 items-center">
-          <div className="flex flex-col justify-center items-center w-80 text-xs mb-4 p-3 px-8 bg-[#f7eefc] rounded-full font-semibold text-[#927c68] shadow-md shadow-base-200">
+          <div className="flex flex-col justify-center items-center w-80 text-xs mb-4 p-3 px-8 bg-[#f7eefc] rounded-full font-semibold text-[#8d7764] shadow-md shadow-base-200">
             <p>커피에 진심이신가요?</p>
             <p className="flex items-center h-6">
               <i className="ico-coffeeBean inline-block mt-0.5 mr-0.5"></i>

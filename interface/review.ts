@@ -8,6 +8,7 @@ export interface ReviewForm {
   richness: string;
   text: string;
 }
+
 export interface ReviewDoc {
   reviewID: string;
   date: number;
@@ -25,15 +26,16 @@ export interface ReviewDoc {
   comments: CommentProp[] | null;
   isRevised: boolean;
 }
+export interface ReviewUserDoc {
+  email: string;
+  displayName: string | null;
+  uid: string;
+  photo: string | null | undefined;
+}
 export interface ReviewDocData {
   reviewID: string;
   date: number;
-  user: {
-    email: string;
-    displayName: string | null;
-    uid: string;
-    photo: string | null | undefined;
-  };
+  user: ReviewUserDoc;
   flavor: FlavorCode;
   richness: RichnessCode;
   text: string;

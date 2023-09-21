@@ -17,3 +17,10 @@ export interface UserDocumentData extends DocumentData {
   favoriteType: TypeCode;
   isPublic: boolean;
 }
+
+export interface UserData {
+  email: string;
+  displayName: string | null;
+  uid: string;
+  photo: string | null | undefined;
+}

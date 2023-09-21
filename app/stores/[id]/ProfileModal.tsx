@@ -1,24 +1,17 @@
 import { favoriteFlavor, favoriteType } from "@/constants/selectOptions";
-import { UserDocumentData } from "@/interface/user";
+import { UserData, UserDocumentData } from "@/interface/user";
 import { getDocUser } from "@/lib/firebase/user";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { BsCheckCircleFill, BsFillPersonFill } from "react-icons/bs";
-
-interface UserData {
-  email: string;
-  displayName: string | null;
-  uid: string;
-  photo: string | null | undefined;
-}
 
 interface ProfileModalProps {
   user: UserData;
+  toggle: Dispatch<SetStateAction<UserData | null>>;
 }
 
-const ProfileModal = ({ user }: ProfileModalProps) => {
-  const [toggle, setToggle] = useState(false);
+const ProfileModal = ({ user, toggle }: ProfileModalProps) => {
   const { data: userDoc } = useQuery<UserDocumentData | null | undefined>(
     ["user", user.uid],
     () => getDocUser(user.uid)
@@ -26,19 +19,13 @@ const ProfileModal = ({ user }: ProfileModalProps) => {
   return (
     <>
       <div
-        onClick={() => setToggle(true)}
-        className="text-[#744959] font-semibold  hover:bg-base-200 cursor-pointer rounded-full py-1 px-3"
-      >
-        {user.displayName ?? user.email}
-      </div>
-      <div
-        onClick={() => setToggle(false)}
-        className={`modal z-[99999] bg-transparent"
-          ${toggle ? "visible opacity-100 pointer-events-auto " : ""}`}
+        onClick={() => toggle(null)}
+        className={`modal z-[99999] bg-transparent
+          visible opacity-100 pointer-events-auto `}
       >
         <div className="modal-box bg-[#f2e8f7] text-center py-8">
           <label
-            onClick={() => setToggle(false)}
+            onClick={() => toggle(null)}
             className="btn btn-xs btn-circle absolute right-2 top-2"
           >
             ✕
