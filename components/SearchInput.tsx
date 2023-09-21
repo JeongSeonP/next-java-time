@@ -32,7 +32,10 @@ const SearchInput = ({ value, dispatchValue, placeHolder }: props) => {
         </button>
       )}
 
-      <button className="btn btn-square bg-white hover:bg-white border-none">
+      <button
+        className="btn btn-square bg-white hover:bg-white border-none"
+        aria-label="searchButton"
+      >
         <BiSearch size="24" className="text-sub-color" />
       </button>
     </>

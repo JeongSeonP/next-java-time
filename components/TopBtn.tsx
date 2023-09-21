@@ -16,6 +16,7 @@ const TopBtn = () => {
   return (
     <>
       <button
+        aria-label="scrollToTopButton"
         onClick={scrollToTop}
         className="md:fixed absolute w-10 h-10 rounded-full shadow-md md:bottom-5 md:right-10 bottom-[230px] translate-x-1/2 right-1/2 bg-[#fff] "
       >

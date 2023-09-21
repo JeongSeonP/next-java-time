@@ -18,6 +18,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
+            <span className="sr-only">twitter link</span>
             <FaXTwitter size={24} />
           </a>
           <a
@@ -25,6 +26,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
+            <span className="sr-only">instagram link</span>
             <BsInstagram size={24} />
           </a>
           <a
@@ -32,6 +34,7 @@ const Footer = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
+            <span className="sr-only">facebook link</span>
             <FaFacebookF size={24} />
           </a>
         </div>

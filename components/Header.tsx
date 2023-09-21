@@ -30,7 +30,10 @@ const Header = () => {
         </h1>
         <div className="flex justify-center items-center">
           {path ? (
-            <button onClick={() => setToggle(true)}>
+            <button
+              onClick={() => setToggle(true)}
+              aria-label="toggleButtonForStoreSearch"
+            >
               <BiSearch size="29" className="mr-4 mt-1 text-sub-color" />
             </button>
           ) : null}
