@@ -34,7 +34,7 @@ const SearchInput = ({ value, dispatchValue, placeHolder }: props) => {
 
       <button
         className="btn btn-square bg-white hover:bg-white border-none"
-        aria-label="searchButton"
+        aria-label="검색버튼"
       >
         <BiSearch size="24" className="text-sub-color" />
       </button>

@@ -1,4 +1,3 @@
-import { DocumentData } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { BsTelephoneFill } from "react-icons/bs";
 import Image from "next/image";

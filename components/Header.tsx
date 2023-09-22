@@ -32,7 +32,7 @@ const Header = () => {
           {path ? (
             <button
               onClick={() => setToggle(true)}
-              aria-label="toggleButtonForStoreSearch"
+              aria-label="카페검색창활성화버튼"
             >
               <BiSearch size="29" className="mr-4 mt-1 text-sub-color" />
             </button>
