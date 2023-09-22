@@ -15,7 +15,7 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "Java Time",
+  title: { default: "Java Time", template: "%s | Java Time" },
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {

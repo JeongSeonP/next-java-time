@@ -6,6 +6,18 @@ import StoreArticle from "./StoreArticle";
 import { getDocStore } from "@/lib/firebase/store";
 import { getReviewList } from "@/lib/firebase/review";
 
+export const generateMetadata = async ({
+  params: { id },
+}: {
+  params: { id: string };
+}) => {
+  const storeDoc = await getDocStore(id);
+  const storeName = storeDoc?.storeName;
+  return {
+    title: storeName,
+  };
+};
+
 const StorePage = async ({ params: { id } }: { params: { id: string } }) => {
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery(["storeInfo", id], () => getDocStore(id));
