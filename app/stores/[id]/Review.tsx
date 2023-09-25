@@ -51,6 +51,7 @@ const Review = ({ id }: { id: string }) => {
   const [sort, setSort] = useState("최신순");
   const [deleteOption, setDeleteOption] = useState<DeleteOption | null>(null);
   const sortList = ["최신순", "평점순"];
+  const [now, setNow] = useState<Date | null>(null);
   const [observeTarget, inView] = useInView({ threshold: 1.0 });
   const { data: storeDoc } = useQuery(["storeInfo", id], () => getDocStore(id));
   const {
@@ -76,6 +77,10 @@ const Review = ({ id }: { id: string }) => {
     button: "확인",
     secondButton: "취소",
   };
+
+  useEffect(() => {
+    setNow(new Date());
+  }, [id]);
 
   useEffect(() => {
     refetch();
@@ -281,7 +286,7 @@ const Review = ({ id }: { id: string }) => {
                       (편집됨)
                     </p>
                   ) : null}
-                  <p>{getFormattedDate(review.date, new Date())}</p>
+                  <p>{getFormattedDate(review.date, now)}</p>
                 </div>
               </div>
               <ul>

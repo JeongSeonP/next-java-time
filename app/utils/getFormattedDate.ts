@@ -6,7 +6,8 @@ import {
   isToday,
 } from "date-fns";
 
-const getFormattedDate = (createdAt: number, now: Date) => {
+const getFormattedDate = (createdAt: number, now: Date | null) => {
+  if (!now) return;
   const date = new Date(createdAt);
   const isThisYear = isSameYear(now, date);
 

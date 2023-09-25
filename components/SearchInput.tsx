@@ -14,7 +14,7 @@ const SearchInput = ({ value, dispatchValue, placeHolder }: props) => {
   return (
     <>
       <input
-        type="search"
+        type="text"
         value={value}
         onChange={(e) => dispatchValue(e.target.value)}
         placeholder={placeHolder}
