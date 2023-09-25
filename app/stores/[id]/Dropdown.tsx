@@ -16,7 +16,10 @@ const Dropdown = (props: Props) => {
   return (
     <div className="dropdown dropdown-end ml-1 z-50">
       <label tabIndex={0} className="btn btn-ghost btn-xs btn-circle avatar">
-        <button className="btn btn-square btn-ghost border border-base-300 btn-xs ">
+        <button
+          aria-label="리뷰편집버튼"
+          className="btn btn-square btn-ghost border border-base-300 btn-xs "
+        >
           <BiDotsVerticalRounded size="18" />
         </button>
       </label>

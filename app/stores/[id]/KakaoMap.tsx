@@ -28,7 +28,7 @@ const KakaoMap = ({ info }: DocumentData) => {
 
         const imageSrc =
             "https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/marker.png?alt=media&token=34e5c33a-f534-4177-b5a3-b37b1b5c1241",
-          imageSize = new kakaoMap.Size(40, 35),
+          imageSize = new kakaoMap.Size(35, 35),
           imageOption = { offset: new kakaoMap.Point(20, 13) };
 
         const markerImage = new kakaoMap.MarkerImage(

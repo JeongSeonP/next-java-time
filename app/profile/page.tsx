@@ -1,5 +1,9 @@
 import ProfileForm from "./ProfileForm";
 
+export const metadata = {
+  title: "프로필작성",
+};
+
 const ProfilePage = () => {
   return (
     <main className="py-14">

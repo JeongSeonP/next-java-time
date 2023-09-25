@@ -1,5 +1,9 @@
 import ReviewForm from "@/app/review/ReviewForm";
 
+export const metadata = {
+  title: "리뷰작성",
+};
+
 const ReviewPage = () => {
   return (
     <main className="py-14">

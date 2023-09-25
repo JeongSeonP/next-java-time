@@ -19,10 +19,13 @@ export const generateMetadata = async ({
 };
 
 const StorePage = async ({ params: { id } }: { params: { id: string } }) => {
+  const pageParam = 0;
+  const isFiltered = false;
+  const sort = "최신순";
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery(["storeInfo", id], () => getDocStore(id));
   await queryClient.prefetchQuery(["reviewInfo", id], () =>
-    getReviewList(id, 0, false, "최신순").then((data) => {
+    getReviewList(id, pageParam, isFiltered, sort).then((data) => {
       return {
         pages: [data],
       };
