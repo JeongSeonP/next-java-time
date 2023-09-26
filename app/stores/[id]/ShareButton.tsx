@@ -1,7 +1,9 @@
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { IoIosShareAlt } from "react-icons/io";
-import ShareModal from "./ShareModal";
+import dynamic from "next/dynamic";
+
+const ShareModal = dynamic(() => import("./ShareModal"));
 
 const ShareButton = ({ storeName }: { storeName: string | undefined }) => {
   const [shareModal, setShareModal] = useState(false);

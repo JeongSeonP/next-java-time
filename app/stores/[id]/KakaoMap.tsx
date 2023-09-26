@@ -9,10 +9,10 @@ declare global {
 const KakaoMap = ({ info }: DocumentData) => {
   const container = useRef(null);
   const overlayContainer = useRef(null);
-  const KAKAO_JAVASCRIPT_KEY = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
   const href = `http://place.map.kakao.com/${info.id}`;
 
   useEffect(() => {
+    const KAKAO_JAVASCRIPT_KEY = process.env.NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY;
     const script = document.createElement("script");
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_JAVASCRIPT_KEY}&autoload=false`;
     document.head.appendChild(script);
@@ -51,7 +51,7 @@ const KakaoMap = ({ info }: DocumentData) => {
       });
     };
     return () => script.remove();
-  }, [container, info, KAKAO_JAVASCRIPT_KEY]);
+  }, [info]);
 
   return (
     <div className="rounded-xl shadow-md overflow-hidden border-2 border-white mb-2">

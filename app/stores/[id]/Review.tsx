@@ -15,7 +15,6 @@ import { BsCheck, BsPencil, BsTrash } from "react-icons/bs";
 import CommentInput from "./CommentInput";
 import Comments from "./Comments";
 import Dropdown from "./Dropdown";
-import InformModal from "@/components/InformModal";
 import { SHOW_MODAL_DELAY } from "@/constants/modalTime";
 import getFormattedDate from "@/app/utils/getFormattedDate";
 import { BiSolidPencil } from "react-icons/bi";
@@ -27,10 +26,11 @@ import { getDocStore } from "@/lib/firebase/store";
 import { deleteReview, getReviewList } from "@/lib/firebase/review";
 import { UserData } from "@/interface/user";
 import ConfirmModal from "./ConfirmModal";
-import ImageModal from "./ImageModal";
 import dynamic from "next/dynamic";
 
 const ProfileModal = dynamic(() => import("./ProfileModal"));
+const InformModal = dynamic(() => import("@/components/InformModal"));
+const ImageModal = dynamic(() => import("./ImageModal"));
 
 export interface DeleteOption {
   storeId: string;
