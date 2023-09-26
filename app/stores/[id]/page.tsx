@@ -24,13 +24,13 @@ const StorePage = async ({ params: { id } }: { params: { id: string } }) => {
   const sort = "최신순";
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery(["storeInfo", id], () => getDocStore(id));
-  await queryClient.prefetchQuery(["reviewInfo", id], () =>
-    getReviewList(id, pageParam, isFiltered, sort).then((data) => {
-      return {
-        pages: [data],
-      };
-    })
-  );
+  // await queryClient.prefetchQuery(["reviewInfo", id], () =>
+  //   getReviewList(id, pageParam, isFiltered, sort).then((data) => {
+  //     return {
+  //       pages: [data],
+  //     };
+  //   })
+  // );
   const dehydratedState = dehydrate(queryClient);
 
   return (
