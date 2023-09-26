@@ -8,20 +8,12 @@ import { CgSpinner } from "react-icons/cg";
 import { getDocStore, getThumbnailUrl } from "@/lib/firebase/store";
 
 const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
-  const [storeImage, setStoreImage] = useState<string | null>(null);
   const { data: storeDoc, isLoading } = useQuery(["storeInfo", id], () =>
     getDocStore(id)
   );
-  useEffect(() => {
-    const refPath = `store/${storeDoc?.id}`;
-    const getUrl = async () => {
-      const url = await getThumbnailUrl(refPath);
-      if (url) {
-        setStoreImage(url);
-      }
-    };
-    getUrl();
-  }, [storeDoc]);
+  const { data: storeImage } = useQuery(["storeImage", id], () => {
+    getThumbnailUrl(`store/${id}`);
+  });
 
   if (isLoading) {
     <div className="animate-spin">

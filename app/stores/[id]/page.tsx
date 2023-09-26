@@ -3,7 +3,7 @@ import getQueryClient from "@/app/utils/getQueryClient";
 import { dehydrate } from "@tanstack/react-query";
 import React from "react";
 import StoreArticle from "./StoreArticle";
-import { getDocStore } from "@/lib/firebase/store";
+import { getDocStore, getThumbnailUrl } from "@/lib/firebase/store";
 import { getReviewList } from "@/lib/firebase/review";
 
 export const generateMetadata = async ({
@@ -24,6 +24,9 @@ const StorePage = async ({ params: { id } }: { params: { id: string } }) => {
   const sort = "최신순";
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery(["storeInfo", id], () => getDocStore(id));
+  await queryClient.prefetchQuery(["storeImage", id], () =>
+    getThumbnailUrl(`store/${id}`)
+  );
   await queryClient.prefetchQuery(["reviewInfo", id], () =>
     getReviewList(id, pageParam, isFiltered, sort).then((data) => {
       return {
