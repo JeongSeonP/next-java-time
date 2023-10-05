@@ -34,13 +34,14 @@ i {
 }
 
 main {
-  min-height: calc(100vh - 96px - 216px);
+  min-height: calc(100vh - 56px - 216px);
   margin-top: 56px;
   color: #52453a;
 }
 
 @media (min-width: 640px) {
   main {
+    min-height: calc(100vh - 96px - 216px);
     margin-top: 96px;
   }
 }

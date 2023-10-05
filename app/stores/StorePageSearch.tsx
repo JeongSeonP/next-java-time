@@ -2,7 +2,7 @@
 
 import SearchInput from "@/components/SearchInput";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchResult from "./SearchResult";
 
 const StorePageSearch = () => {
@@ -10,6 +10,10 @@ const StorePageSearch = () => {
   const searchParams = useSearchParams();
   const searchParamsInput = searchParams.get("search") ?? "";
   const [searchInput, setSearchInput] = useState(searchParamsInput);
+
+  useEffect(() => {
+    setSearchInput(searchParamsInput);
+  }, [searchParamsInput]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

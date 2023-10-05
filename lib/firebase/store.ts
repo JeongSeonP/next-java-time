@@ -137,7 +137,6 @@ export const getThumbnailUrl = async (refPath: string) => {
     if (imgList.prefixes.length == 0 && imgList.items.length == 0) return null;
     if (imgList.prefixes[0] == undefined) {
       const url = await getDownloadURL(imgList.items[0]);
-      console.log(url);
       return url;
     }
     const test = await list(imgList.prefixes[0], { maxResults: 1 });

@@ -2,7 +2,7 @@
 
 import { BiSearch } from "react-icons/bi";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import InputDispatch from "./InputDispatch";
 import MyMenu from "./MyMenu";
@@ -10,11 +10,12 @@ import MyMenu from "./MyMenu";
 const Header = () => {
   const [toggle, setToggle] = useState(false);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const searchParamsInput = searchParams.get("search");
   const path = pathname !== "/" && pathname !== "/reviewsearch" ? true : false;
-
   useEffect(() => {
     setToggle(false);
-  }, [pathname]);
+  }, [pathname, searchParamsInput]);
 
   return (
     <header className="h-14 sm:h-24 px-7 sm:p-4 bg-base-200 flex justify-between items-center fixed top-0 left-0 right-0 z-[99999] shadow">
@@ -46,14 +47,21 @@ const Header = () => {
           toggle && `visible opacity-100 pointer-events-auto bg-transparent`
         }`}
       ></div>
-      <div
-        className={`modal z-[99999]  absolute  w-full top-[53px] sm:top-[93px] h-14
-        ${toggle && `visible opacity-100 pointer-events-auto bg-transparent `}`}
-      >
-        <div className=" w-full md:max-w-lg">
+      {/* {toggle && (
+        <div className="z-[99999] absolute  w-full left-0 top-[53px] sm:top-[93px] h-14">
           <InputDispatch />
         </div>
-      </div>
+      )} */}
+      {toggle && (
+        <div
+          className={`modal z-[99999]  absolute  w-full top-[53px] sm:top-[93px] h-14
+        ${toggle && `visible opacity-100 pointer-events-auto bg-transparent `}`}
+        >
+          <div className=" w-full md:max-w-lg">
+            <InputDispatch />
+          </div>
+        </div>
+      )}
     </header>
   );
 };
