@@ -1,24 +1,40 @@
-import { useEffect, useState } from "react";
+"use client";
+
 import { BsTelephoneFill } from "react-icons/bs";
 import Image from "next/image";
 import StarRate from "@/components/StarRate";
-import KakaoMap from "./KakaoMap";
 import { useQuery } from "@tanstack/react-query";
 import { CgSpinner } from "react-icons/cg";
 import { getDocStore, getThumbnailUrl } from "@/lib/firebase/store";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { notFound } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
+
+const KakaoMap = dynamic(() => import("./KakaoMap"));
 
 const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
+  const [storeImage, setStoreImage] = useState<string | null>(null);
   const { data: storeDoc, isLoading } = useQuery(["storeInfo", id], () =>
     getDocStore(id)
   );
-  const { data: storeImage } = useQuery(["storeImage", id], () => {
-    getThumbnailUrl(`store/${id}`);
-  });
+  if (!storeDoc) {
+    notFound();
+  }
+
+  useEffect(() => {
+    const refPath = `store/${id}`;
+    const getUrl = async () => {
+      const url = await getThumbnailUrl(refPath);
+      if (url) {
+        setStoreImage(url);
+      }
+    };
+    getUrl();
+  }, [id]);
 
   if (isLoading) {
-    <div className="animate-spin">
-      <CgSpinner className="text-neutral-content text-4xl" />
-    </div>;
+    <LoadingSpinner />;
   }
 
   const averageRate = storeDoc
@@ -29,6 +45,9 @@ const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
 
   return (
     <>
+      <h2 className="font-semibold  mb-4 text-lg flex justify-center items-center mx-auto w-fit px-7 h-12 rounded-full bg-white shadow ">
+        {storeDoc?.storeName}
+      </h2>
       <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-xl">
         <div className="flex items-center justify-around md:justify-between mb-2 w-[350px] ">
           <div className="flex relative items-center justify-center w-[130px] h-[130px] md:w-[150px] md:h-[150px] bg-[#fff] mr-2 border border-neutral-300 rounded-xl overflow-hidden shrink-0">
@@ -75,7 +94,7 @@ const StoreInfo = ({ id, map }: { id: string; map: boolean }) => {
             </div>
           </div>
         </div>
-        {map ? <KakaoMap info={storeDoc} /> : null}
+        {map && <KakaoMap info={storeDoc} />}
       </div>
     </>
   );

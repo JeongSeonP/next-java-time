@@ -1,10 +1,12 @@
 import HydratedComponent from "@/app/utils/HydratedComponent";
 import getQueryClient from "@/app/utils/getQueryClient";
 import { dehydrate } from "@tanstack/react-query";
-import React from "react";
+import { Suspense } from "react";
 import StoreArticle from "./StoreArticle";
-import { getDocStore, getThumbnailUrl } from "@/lib/firebase/store";
-import { getReviewList } from "@/lib/firebase/review";
+import { getDocStore } from "@/lib/firebase/store";
+import ReviewSection from "./ReviewSection";
+import StoreArticleLoading from "./StoreArticleLoading";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export const generateMetadata = async ({
   params: { id },
@@ -19,29 +21,15 @@ export const generateMetadata = async ({
 };
 
 const StorePage = async ({ params: { id } }: { params: { id: string } }) => {
-  const pageParam = 0;
-  const isFiltered = false;
-  const sort = "최신순";
-  const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(["storeInfo", id], () => getDocStore(id));
-  await queryClient.prefetchQuery(["storeImage", id], () =>
-    getThumbnailUrl(`store/${id}`)
-  );
-  await queryClient.prefetchQuery(["reviewInfo", id], () =>
-    getReviewList(id, pageParam, isFiltered, sort).then((data) => {
-      return {
-        pages: [data],
-      };
-    })
-  );
-  const dehydratedState = dehydrate(queryClient);
-
   return (
     <main className="pt-7 pb-20">
       <div className=" w-4/5 mx-auto text-center flex flex-col justify-center items-center">
-        <HydratedComponent state={dehydratedState}>
+        <Suspense fallback={<StoreArticleLoading />}>
           <StoreArticle id={id} />
-        </HydratedComponent>
+        </Suspense>
+        <Suspense fallback={<LoadingSpinner />}>
+          <ReviewSection id={id} />
+        </Suspense>
       </div>
     </main>
   );

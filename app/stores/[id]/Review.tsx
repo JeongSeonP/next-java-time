@@ -1,3 +1,5 @@
+"use client";
+
 import StarRate from "@/components/StarRate";
 import { flavorList, richnessList } from "@/constants/selectOptions";
 import { ReviewDocData, ReviewDocumentData } from "@/interface/review";

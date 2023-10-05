@@ -5,9 +5,9 @@ import Footer from "@/components/Footer";
 import ReactQueryProviders from "./utils/ReactQueryProviders";
 import RecoilRootWrapper from "@/app/utils/RecoilRootWrapper";
 import { Suspense } from "react";
-import Loading from "./loading";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
+import Loading from "./loading";
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ["latin"],
