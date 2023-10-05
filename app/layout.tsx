@@ -16,6 +16,7 @@ const notoSansKR = Noto_Sans_KR({
 
 export const metadata: Metadata = {
   title: { default: "Java Time", template: "%s | Java Time" },
+  description: "Java Time에서 커피리뷰를 공유해보세요",
 };
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
