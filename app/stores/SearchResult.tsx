@@ -73,7 +73,7 @@ const SearchResult = () => {
                 onClick={() => router.push(`/stores/${store}`)}
                 className="cursor-pointer hover:bg-white transition duration-300 ease-in-out rounded-2xl pt-1 pl-1"
               >
-                <StoreInfo id={store} map={false} />
+                <StoreInfo id={store} asArticle={false} />
               </li>
             ))
           )
