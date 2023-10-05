@@ -11,7 +11,7 @@ const StoreArticle = async ({ id }: { id: string }) => {
   return (
     <article>
       <HydratedComponent state={dehydratedState}>
-        <StoreInfo id={id} map={true} />
+        <StoreInfo id={id} asArticle={true} />
       </HydratedComponent>
     </article>
   );

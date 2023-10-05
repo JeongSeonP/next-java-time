@@ -7,6 +7,7 @@ import { getDocStore } from "@/lib/firebase/store";
 import ReviewSection from "./ReviewSection";
 import StoreArticleLoading from "./StoreArticleLoading";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { notFound } from "next/navigation";
 
 export const generateMetadata = async ({
   params: { id },
@@ -14,6 +15,9 @@ export const generateMetadata = async ({
   params: { id: string };
 }) => {
   const storeDoc = await getDocStore(id);
+  if (!storeDoc) {
+    notFound();
+  }
   const storeName = storeDoc?.storeName;
   return {
     title: storeName,
