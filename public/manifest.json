@@ -26,9 +26,15 @@
       "type": "image/png"
     },
     {
-      "src": "../icon-512x512.png",
+      "src": "./icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "./maskable.png",
+      "sizes": "225x225",
+      "type": "image/x-icon",
+      "purpose": "maskable"
     }
   ],
   "lang": "ko"
