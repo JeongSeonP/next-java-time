@@ -1,0 +1,35 @@
+{
+  "background_color": "#ffffff",
+  "description": "the place you can share coffee shop reviews so that you can find right place to try!",
+  "display": "standalone",
+  "name": "Java Time",
+  "orientation": "any",
+  "scope": ".",
+  "short_name": "Java Time",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "categories": [],
+  "icons": [
+    {
+      "src": "./icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "../icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "lang": "ko"
+}
