@@ -1,14 +1,14 @@
-# NEXT JAVA TIME
+# ☕ NEXT JAVA TIME
 
 <div align="center">
-<img src="https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/coffeeBean.png?alt=media&token=a0d30ecd-2d19-4207-8179-8612c251c1ef&_gl=1*1k3hhpp*_ga*MTIzOTI2NTE2NC4xNjgxNzM3NTEz*_ga_CW55HF8NVT*MTY5NzcwNzczMy4xNDQuMS4xNjk3NzA3ODIyLjM0LjAuMA.." width="100">
+<img src="https://firebasestorage.googleapis.com/v0/b/javatime-6eaed.appspot.com/o/coffeeBean.png?alt=media&token=a0d30ecd-2d19-4207-8179-8612c251c1ef&_gl=1*1k3hhpp*_ga*MTIzOTI2NTE2NC4xNjgxNzM3NTEz*_ga_CW55HF8NVT*MTY5NzcwNzczMy4xNDQuMS4xNjk3NzA3ODIyLjM0LjAuMA.." width="80">
 </div>
 
 수준 높은 맛의 커피를 제공해주는 카페를 찾기 위한,
 오로지 커피 맛에 대한 리뷰와 평가를 공유할 수 있는 공간입니다.
 기존에 React+Vite기반으로 만들었던 Java Time을 next.js로 업데이트하였습니다.
 
-- demo link : https://next-java-time.vercel.app
+- Demo link : https://next-java-time.vercel.app
 
 ## Installation
 
