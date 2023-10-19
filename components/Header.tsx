@@ -47,11 +47,6 @@ const Header = () => {
           toggle && `visible opacity-100 pointer-events-auto bg-transparent`
         }`}
       ></div>
-      {/* {toggle && (
-        <div className="z-[99999] absolute  w-full left-0 top-[53px] sm:top-[93px] h-14">
-          <InputDispatch />
-        </div>
-      )} */}
       {toggle && (
         <div
           className={`modal z-[99999]  absolute  w-full top-[53px] sm:top-[93px] h-14
