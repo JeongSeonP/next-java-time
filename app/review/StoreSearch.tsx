@@ -115,9 +115,9 @@ const StoreSearch = ({ dispatch }: StoreSearchProps) => {
             />
           </form>
           {resultModal ? (
-            <div className="absolute w-full max-w-lg bg-base-200 rounded-xl overflow-hidden shadow-md text-center">
+            <div className="absolute w-full max-w-lg max-h-96 bg-base-200 rounded-xl overflow-hidden overflow-y-auto shadow-md text-center">
               {noResult ? (
-                <div className="w-[350px] p-6 text-sm">
+                <div className="w-[350px] p-6  text-sm text-left">
                   검색결과가 없습니다.
                 </div>
               ) : (

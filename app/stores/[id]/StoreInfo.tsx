@@ -5,9 +5,7 @@ import Image from "next/image";
 import StarRate from "@/components/StarRate";
 import { useQuery } from "@tanstack/react-query";
 import { getDocStore, getThumbnailUrl } from "@/lib/firebase/store";
-import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import KakaoMapLoading from "./KakaoMapLoading";
 
 const KakaoMap = dynamic(() => import("./KakaoMap"), {
