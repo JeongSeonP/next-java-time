@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { StoreDocumentData } from "@/interface/store";
@@ -13,23 +14,14 @@ interface TableItemProps {
 
 const TableItem = ({ store, idx }: TableItemProps) => {
   const router = useRouter();
-  const [storeImage, setStoreImage] = useState<string | null>(null);
+  const { data: storeImage } = useQuery(["storeImage", store.id], () =>
+    getThumbnailUrl(`store/${store.id}`)
+  );
 
   const averageRate =
     store.ttlParticipants == 0
       ? "0"
       : (store.ttlRate / store.ttlParticipants).toFixed(1).toString();
-
-  useEffect(() => {
-    const refPath = `store/${store.id}`;
-    const getUrl = async () => {
-      const url = await getThumbnailUrl(refPath);
-      if (url) {
-        setStoreImage(url);
-      }
-    };
-    getUrl();
-  }, [store]);
 
   return (
     <div

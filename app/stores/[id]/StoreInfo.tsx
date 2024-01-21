@@ -8,30 +8,17 @@ import { getDocStore, getThumbnailUrl } from "@/lib/firebase/store";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import KakaoMapLoading from "./KakaoMapLoading";
 
-const KakaoMap = dynamic(() => import("./KakaoMap"));
+const KakaoMap = dynamic(() => import("./KakaoMap"), {
+  loading: () => <KakaoMapLoading />,
+});
 
 const StoreInfo = ({ id, asArticle }: { id: string; asArticle: boolean }) => {
-  const [storeImage, setStoreImage] = useState<string | null>(null);
-  const { data: storeDoc, isLoading } = useQuery(["storeInfo", id], () =>
-    getDocStore(id)
+  const { data: storeImage } = useQuery(["storeImage", id], () =>
+    getThumbnailUrl(`store/${id}`)
   );
-
-  useEffect(() => {
-    const refPath = `store/${id}`;
-    const getUrl = async () => {
-      const url = await getThumbnailUrl(refPath);
-      if (url) {
-        setStoreImage(url);
-      }
-    };
-    getUrl();
-  }, [id]);
-
-  if (isLoading) {
-    <LoadingSpinner />;
-  }
-
+  const { data: storeDoc } = useQuery(["storeInfo", id], () => getDocStore(id));
   const averageRate = storeDoc
     ? storeDoc?.ttlParticipants == 0
       ? "0"
