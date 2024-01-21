@@ -3,10 +3,8 @@ import { Noto_Sans_KR } from "next/font/google";
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
 import ReactQueryProviders from "./utils/ReactQueryProviders";
-import { Suspense } from "react";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
-import Loading from "./loading";
 
 const notoSansKR = Noto_Sans_KR({
   subsets: ["latin"],
@@ -26,7 +24,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <ReactQueryProviders>
           <ScrollToTop />
           <Header />
-          <Suspense fallback={<Loading />}>{children}</Suspense>
+          {children}
           <Footer />
         </ReactQueryProviders>
       </body>
