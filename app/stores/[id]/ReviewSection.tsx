@@ -1,8 +1,7 @@
-import HydratedComponent from "@/app/utils/HydratedComponent";
 import Review from "./Review";
 import getQueryClient from "@/app/utils/getQueryClient";
 import { getReviewList } from "@/lib/firebase/review";
-import { dehydrate } from "@tanstack/react-query";
+import { Hydrate, dehydrate } from "@tanstack/react-query";
 
 const ReviewSection = async ({ id }: { id: string }) => {
   const pageParam = 0;
@@ -18,9 +17,9 @@ const ReviewSection = async ({ id }: { id: string }) => {
   );
   const dehydratedState = dehydrate(queryClient);
   return (
-    <HydratedComponent state={dehydratedState}>
+    <Hydrate state={dehydratedState}>
       <Review id={id} />
-    </HydratedComponent>
+    </Hydrate>
   );
 };
 

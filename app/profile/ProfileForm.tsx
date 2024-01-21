@@ -59,7 +59,6 @@ const ProfileForm = () => {
     mode: "onSubmit",
     defaultValues: initialValue,
   });
-  const isPublic = watch("isPublic");
 
   useEffect(() => {
     if (userDoc || user) {
@@ -80,6 +79,7 @@ const ProfileForm = () => {
     }
   }, [user, userDoc, reset]);
 
+  const isPublic = watch("isPublic");
   const handleSubmit = async (formData: ProfileForm) => {
     if (!user) return;
     const { uid } = user;
@@ -193,7 +193,7 @@ const ProfileForm = () => {
           <input
             type="checkbox"
             className="toggle toggle-primary"
-            defaultChecked
+            checked={isPublic}
             {...register("isPublic")}
           />
         </label>

@@ -54,7 +54,7 @@ const KakaoMap = ({ info }: DocumentData) => {
   }, [info]);
 
   return (
-    <div className="rounded-xl shadow-md overflow-hidden border-2 border-white mb-2">
+    <div className="md:w-[150px] md:h-[150px] w-[350px] h-[120px] rounded-xl shadow-md overflow-hidden border-2 border-white mb-2">
       <div ref={overlayContainer} className="relative inline-block z-[999]">
         <div className="flex items-center text-base-100 w-fit py-1 px-3 h-5 rounded-md bg-neutral hover:text-sub-color transition-transform duration-100 ease-in-out  text-xs  after:content-['']  after:absolute after:left-[50%] after:rotate-45 after:-translate-x-2/4 after:-bottom-1 after:w-2 after:h-2 after:border-b-4 after:border-r-4 after:border-neutral shadow-[1px_2px_2px_0px_#fff] after:shadow-[1px_1px_1px_0px_#fff]">
           <a

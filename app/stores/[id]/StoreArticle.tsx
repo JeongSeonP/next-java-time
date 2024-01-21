@@ -1,8 +1,7 @@
-import { dehydrate } from "@tanstack/react-query";
+import { Hydrate, dehydrate } from "@tanstack/react-query";
 import StoreInfo from "./StoreInfo";
 import { getDocStore } from "@/lib/firebase/store";
 import getQueryClient from "@/app/utils/getQueryClient";
-import HydratedComponent from "@/app/utils/HydratedComponent";
 
 const StoreArticle = async ({ id }: { id: string }) => {
   const queryClient = getQueryClient();
@@ -10,9 +9,9 @@ const StoreArticle = async ({ id }: { id: string }) => {
   const dehydratedState = dehydrate(queryClient);
   return (
     <article>
-      <HydratedComponent state={dehydratedState}>
+      <Hydrate state={dehydratedState}>
         <StoreInfo id={id} asArticle={true} />
-      </HydratedComponent>
+      </Hydrate>
     </article>
   );
 };

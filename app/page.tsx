@@ -2,8 +2,7 @@ import InputDispatch from "@/components/InputDispatch";
 import Link from "next/link";
 import { BsChatHeartFill } from "react-icons/bs";
 import getQueryClient from "./utils/getQueryClient";
-import { dehydrate } from "@tanstack/react-query";
-import HydratedComponent from "@/app/utils/HydratedComponent";
+import { Hydrate, dehydrate } from "@tanstack/react-query";
 import Table from "@/components/Table";
 import { getMostPopularStores } from "@/lib/firebase/store";
 
@@ -37,9 +36,9 @@ const HomePage = async () => {
           </button>
         </section>
         <section>
-          <HydratedComponent state={dehydratedState}>
+          <Hydrate state={dehydratedState}>
             <Table />
-          </HydratedComponent>
+          </Hydrate>
         </section>
       </div>
     </main>

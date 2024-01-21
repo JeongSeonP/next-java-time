@@ -201,7 +201,7 @@ export const getReviewList = async (
           ? reviewList.length == perPage + 1
           : false;
 
-        if (reviewList.length === perPage + 1) {
+        if (reviewList.length == perPage + 1) {
           reviewList.splice(perPage);
         }
         const result: ReviewDocumentData = {

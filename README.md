@@ -4,7 +4,7 @@
 <p>
 수준 높은 맛의 커피를 제공해주는 카페를 찾기 위한,
 오로지 커피 맛에 대한 리뷰와 평가를 공유할 수 있는 공간입니다.<br>
-기존에 React+Vite기반으로 만들었던 Java Time을 next.js로 업데이트하였습니다.<br>
+기존에 React+Vite기반으로 만들었던 Java Time을 next.js (app directory)로 업데이트하였습니다.<br>
 </p>
 
 </div>

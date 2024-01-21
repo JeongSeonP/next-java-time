@@ -177,7 +177,7 @@ const Review = ({ id }: { id: string }) => {
             <button
               key={sortItem}
               onClick={() => setSort(sortItem)}
-              className={`btn btn-ghost btn-xs  text-xs  bg-base-300 hover:bg-base-200 hover:text-neutral-500
+              className={`btn btn-ghost btn-xs  text-xs  bg-base-300 hover:bg-base-400
                 ${sortItem === sort ? "text-neutral" : "text-neutral-100"}`}
             >
               {sortItem === sort ? (

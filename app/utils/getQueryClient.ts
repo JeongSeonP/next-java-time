@@ -12,6 +12,4 @@ const getQueryClient = cache(
     })
 );
 
-// 디폴트 옵션을 여기에도 추가하는게 맞을듯한데 확인해보기
-
 export default getQueryClient;

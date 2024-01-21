@@ -1,4 +1,3 @@
-import { StoreProps } from "@/app/review/StoreSearch";
 import axios from "axios";
 
 const KAKAO_REST_API_KEY = process.env.NEXT_PUBLIC_KAKAO_REST_API_KEY;
