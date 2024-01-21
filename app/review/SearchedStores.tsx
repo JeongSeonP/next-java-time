@@ -29,19 +29,19 @@ const SearchedStores = ({ storeList, dispatchID }: SearchedStoreProps) => {
               />
               <label
                 htmlFor={store.id}
-                className="p-1 w-full flex md:justify-between"
+                className="p-1 w-full flex md:justify-between text-xs"
               >
                 <div className="w-full  flex items-center justify-between ml-2 truncate">
-                  <p className="text-left text-sm font-semibold w-1/3 md:leading-loose whitespace-normal">
+                  <p className="text-left  font-semibold w-1/3 md:leading-loose whitespace-normal">
                     {store.place_name}
                   </p>
                   <div className="w-[40%] flex flex-col md:justify-center">
-                    <p className="truncate text-xs text-left">
+                    <p className="truncate text-left">
                       {store.road_address_name}
                     </p>
-                    <p className="truncate text-xs text-left">{store.phone}</p>
+                    <p className="truncate text-left">{store.phone}</p>
                   </div>
-                  <p className="text-left text-xs my-1 hover:bg-base-300 bg-base-100 p-1 rounded-full">
+                  <p className="text-left my-1 hover:bg-base-300 bg-base-100 p-1 rounded-full">
                     <a
                       target="_blank"
                       rel="noopener noreferrer"

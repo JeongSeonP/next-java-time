@@ -49,3 +49,19 @@ main {
 .modal:not(dialog:not(.modal-open)) {
   background-color: transparent;
 }
+
+/* scroll */
+div::-webkit-scrollbar {
+  width: 8px;
+}
+div::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+}
+div::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+div::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
