@@ -107,7 +107,7 @@ const Review = ({ id }: { id: string }) => {
   const { mutate: reviewMutate, isLoading } = useMutation(deleteReview, {
     onSuccess: () => {
       queryClient.invalidateQueries(["reviewInfo", id]);
-      queryClient.invalidateQueries(["storeInfo", id]);
+      queryClient.invalidateQueries(["storeInfo"]);
       setTimeout(() => {
         setInformModal(false);
       }, SHOW_MODAL_DELAY);
