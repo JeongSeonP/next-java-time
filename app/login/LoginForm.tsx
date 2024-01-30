@@ -52,7 +52,8 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (user || googleUser || githubUser) {
-      pathname !== "/login" ? router.refresh() : router.replace("/");
+      router.refresh();
+      pathname == "/login" && router.replace("/");
     }
 
     if (!error && !googleError && !githubError) return;

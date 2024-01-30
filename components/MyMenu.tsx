@@ -14,7 +14,7 @@ const MyMenu = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    router.push("/login");
+    router.refresh();
   };
 
   const handleFocus = () => {
