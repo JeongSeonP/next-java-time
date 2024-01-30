@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import SearchInput from "../../components/SearchInput";
 import SearchedStores from "./SearchedStores";
 import { getSearchedStoreInfo } from "@/lib/kakaoAPI";
+import { SelectedStore } from "@/interface/store";
 
 export interface StoreProps {
   id: string;
@@ -13,16 +14,7 @@ export interface StoreProps {
 }
 
 interface StoreSearchProps {
-  dispatch: Dispatch<
-    SetStateAction<{
-      id: string;
-      phone: string;
-      storeName: string;
-      address: string;
-      x: string;
-      y: string;
-    }>
-  >;
+  dispatch: Dispatch<SetStateAction<SelectedStore | undefined>>;
 }
 
 const StoreSearch = ({ dispatch }: StoreSearchProps) => {

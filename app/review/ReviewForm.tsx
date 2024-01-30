@@ -23,6 +23,7 @@ import {
   setDocReview,
 } from "@/lib/firebase/review";
 import { deleteImg } from "@/lib/firebase/user";
+import { SelectedStore } from "@/interface/store";
 
 const ReviewForm = () => {
   const [user] = useAuthState(auth);
@@ -34,14 +35,8 @@ const ReviewForm = () => {
   const [imgFile, setImgFile] = useState<MultiImagefile | null>(null);
   const [modal, setModal] = useState(false);
   const [inform, setInform] = useState("리뷰가 등록되었습니다!");
-  const [store, setStore] = useState({
-    id: "",
-    phone: "",
-    storeName: "",
-    address: "",
-    x: "",
-    y: "",
-  });
+  const [store, setStore] = useState<SelectedStore | null>(null);
+
   const {
     register,
     formState: { errors },
@@ -61,9 +56,9 @@ const ReviewForm = () => {
   const { mutate: reviewMutate, isLoading } = useMutation(setDocReview, {
     onSuccess: () => {
       queryClient.invalidateQueries(["storeInfo"]);
-      queryClient.invalidateQueries(["reviewInfo", store.id]);
+      queryClient.invalidateQueries(["reviewInfo", store?.id]);
       setTimeout(() => {
-        router.replace(`/stores/${store.id}`);
+        router.replace(`/stores/${store?.id}`);
       }, SHOW_MODAL_DELAY);
     },
   });
@@ -71,41 +66,37 @@ const ReviewForm = () => {
   const rate = watch("rating");
 
   useEffect(() => {
-    const store = sessionStorage.getItem("selectedStore");
-    if (!store) return;
-    setStore(JSON.parse(store));
+    const selectedStore = sessionStorage.getItem("selectedStore");
+    if (selectedStore) setStore(JSON.parse(selectedStore));
 
     const isRevision = sessionStorage.getItem("revisionOption");
-    if (!isRevision) return;
-    setExistingReview(JSON.parse(isRevision));
+    if (isRevision) {
+      const existingReview = JSON.parse(isRevision);
 
-    return () => {
-      sessionStorage.clear();
-      setModal(false);
-    };
-  }, []);
+      setExistingReview(existingReview);
 
-  useEffect(() => {
-    if (existingReview) {
       reset({
         rating: existingReview.rating,
         flavor: existingReview.flavor,
         richness: existingReview.richness,
         text: existingReview.text,
       });
-    }
 
-    if (existingReview?.img) {
-      setImgFile({
-        file: null,
-        thumbnail: existingReview.img,
-        name: "prevImg",
-      });
+      if (existingReview?.img) {
+        setImgFile({
+          file: null,
+          thumbnail: existingReview.img,
+          name: "prevImg",
+        });
+      }
     }
-  }, [existingReview, reset]);
+    return () => {
+      sessionStorage.clear();
+    };
+  }, [reset]);
 
   const handleSubmit = async (formData: ReviewForm) => {
-    if (store.id == "") {
+    if (!store) {
       setInform("선택된 카페가 없습니다.");
       setModal(true);
       setTimeout(() => {
@@ -192,7 +183,7 @@ const ReviewForm = () => {
         <StoreSearch dispatch={setStore} />
       </div>
       <form onSubmit={onSubmit(handleSubmit)} className="flex flex-col">
-        {store.storeName == "" ? (
+        {!store ? (
           <p className="text-primary-dark-color text-sm font-semibold text-center">
             {" "}
             선택된 카페가 없습니다.
