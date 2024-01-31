@@ -14,7 +14,7 @@ export interface StoreProps {
 }
 
 interface StoreSearchProps {
-  dispatch: Dispatch<SetStateAction<SelectedStore | undefined>>;
+  dispatch: Dispatch<SetStateAction<SelectedStore | null>>;
 }
 
 const StoreSearch = ({ dispatch }: StoreSearchProps) => {
